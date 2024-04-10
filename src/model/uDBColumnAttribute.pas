@@ -23,7 +23,7 @@ type
   TDBTable = class(TCustomAttribute)
   private
     FTableName: String;
-  published
+  public
     constructor Create(const ATableName: String);
     property TableName: String read FTableName write FTableName;
   end;
