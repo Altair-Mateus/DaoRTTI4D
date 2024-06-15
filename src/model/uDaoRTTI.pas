@@ -12,6 +12,7 @@ type
   private
     FPropertiesToWhere: TStringList;
     class var FConnection: TFDConnection;
+
     //  Verifica se a classe possui o atributo com o nome da tabela
     function CheckTableAttribute(pType: TRttiType) : Boolean;
     //  Verifica se a property tem o atributo com o nome da coluna do Banco de dados
@@ -62,15 +63,15 @@ uses
 
 function TDaoRTTI.CheckTableAttribute(pType: TRttiType): Boolean;
 begin
-  
+
   Result := False;
-    
+
   //  Verifica se a classe possui o atributo com o nome da tabela
   if (pType.HasAttribute<TDBTable>) and ( pType.GetAttribute<TDBTable>.TableName <> '') then
   begin
       Result := True;
   end;
-    
+
 end;
 
 constructor TDaoRTTI.Create;
@@ -145,7 +146,9 @@ begin
     try
 
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       // Define parâmetros
       for lProperty in lType.GetProperties do
@@ -216,7 +219,9 @@ begin
     try
 
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       //  Parametro da PK
       lQuery.Params.ParamByName(lPk.Name).Value := GetParameterValue(pObject, lPk);
@@ -293,7 +298,9 @@ begin
     try
 
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       //  Define os parametros
       for lProperty in lType.GetProperties do
@@ -330,7 +337,7 @@ var
   lProperty: TRttiProperty;
   lSQL, lTable: string;
   lQuery: TFDQuery;
-  
+
 begin
 
   Result   := False;
@@ -363,7 +370,9 @@ begin
     try
 
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;  
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       lQuery.Prepare;
       lQuery.ExecSQL;
@@ -441,14 +450,16 @@ begin
 end;
 
 function TDaoRTTI.CheckColumnsAttribute(pProperty: TRttiProperty): Boolean;
+var
+  lAttr : TDBColumnAttribute;
 begin
 
   Result := False;
-
-  //  Verifica se a property possui o atributo com o nome da coluna
-  if pProperty.HasAttribute<TDBColumnAttribute> then
-    //  Verifica se o atributo não é PK
-    if not (pProperty.GetAttribute<TDBColumnAttribute>.IsPrimaryKey) then
+  lAttr := pProperty.GetAttribute<TDBColumnAttribute>;
+  // Verifica se a property possui o atributo com o nome da coluna
+  if Assigned(lAttr) then
+    // Verifica se o atributo não é PK
+    if (not lAttr.IsAutoIncrement) then
       Result := True;
 
 end;
@@ -477,7 +488,7 @@ begin
         raise Exception.Create('Classe ' + lType.Name + ' está com o atributo TDBTable em branco ou insxistente!');
         exit;
     end;
-    
+
     lTable   := lType.GetAttribute<TDBTable>.TableName;
     lColumns := '';
     lValues  := '';
@@ -494,7 +505,7 @@ begin
       end;
 
     end;
-    
+
     // Remove a última vírgula
     lColumns := Copy(lColumns, 1, Length(lColumns) - 2);
     lValues  := Copy(lValues, 1, Length(lValues) - 2);
@@ -505,7 +516,9 @@ begin
     try
 
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       // Definindo parâmetros
       for lProperty in lType.GetProperties do
@@ -540,7 +553,7 @@ var
   lProperty: TRttiProperty;
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
-  
+
 begin
 
   Result := False;
@@ -553,7 +566,7 @@ begin
     raise Exception.Create('É necessário informar uma condição para executar um Update!');
     exit;
   end;
-  
+
 
   try
     lType := lContext.GetType(pObject.ClassType);
@@ -586,7 +599,9 @@ begin
 
     try
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       // Define parâmetros
       for lProperty in lType.GetProperties do
@@ -618,7 +633,7 @@ var
   lProperty, lPk: TRttiProperty;
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
-  
+
 begin
 
   Result := False;
@@ -666,7 +681,9 @@ begin
 
     try
       lQuery.Connection := FConnection;
-      lQuery.SQL.Text := lSQL;
+      lQuery.Close;
+      lQuery.SQL.Clear;
+      lQuery.SQL.Add(lSQL);
 
       // Define parâmetros
       for lProperty in lType.GetProperties do
@@ -690,7 +707,7 @@ begin
         raise Exception.Create('Erro ao atualizar registro na tabela ' + lTable + E.Message);
       end;
     end;
-    
+
   finally
     lContext.Free;
     lQuery.Free;
@@ -705,7 +722,7 @@ var
   lProperty: TRttiProperty;
   lSQL, lTable: string;
   lQuery: TFDQuery;
-  
+
 begin
 
   Result := False;
@@ -740,7 +757,8 @@ begin
 
     // Executa a consulta SQL
     try
-
+      lQuery.Close;
+      lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
       lQuery.Params.ParamByName(lProperty.Name).Value := GetParameterValue(pObject, lProperty);;
       lQuery.Open;
@@ -748,8 +766,8 @@ begin
       // Atribui os valores das colunas às propriedades do objeto
       for lProperty in lType.GetProperties do
       begin
-        if not lQuery.FieldByName(lProperty.Name).IsNull then
-          lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lProperty.Name).Value));
+        if not lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).IsNull then
+          lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).Value));
       end;
 
       Result := True;
