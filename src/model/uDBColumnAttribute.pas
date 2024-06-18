@@ -12,12 +12,15 @@ type
     FIsPrimaryKey: Boolean;
     FIsAutoIncrement: Boolean;
     FFieldName: string;
+    FAcceptNull: Boolean;
 
-    public
-      constructor Create(const AFieldName: string; AIsPrimaryKey: Boolean = False; AIsAutoIncrement: Boolean = False);
-      property FieldName: string read FFieldName;
-      property IsPrimaryKey: Boolean read FIsPrimaryKey;
-      property IsAutoIncrement: Boolean read FIsAutoIncrement;
+  public
+    constructor Create(const AFieldName: string; AIsPrimaryKey: Boolean = False;
+      AIsAutoIncrement: Boolean = False; AAcceptNull: Boolean = False);
+    property FieldName: string read FFieldName;
+    property IsPrimaryKey: Boolean read FIsPrimaryKey;
+    property IsAutoIncrement: Boolean read FIsAutoIncrement;
+    property AcceptNull: Boolean read FAcceptNull write FAcceptNull;
   end;
 
   TDBTable = class(TCustomAttribute)
@@ -32,12 +35,13 @@ implementation
 
 { TDBColumnAtrribute }
 
-constructor TDBColumnAttribute.Create(const AFieldName: string; AIsPrimaryKey,
-  AIsAutoIncrement: Boolean);
+constructor TDBColumnAttribute.Create(const AFieldName: string; AIsPrimaryKey: Boolean = False;
+      AIsAutoIncrement: Boolean = False; AAcceptNull: Boolean = False);
 begin
-  FFieldName       := AFieldName;
-  FIsPrimaryKey    := AIsPrimaryKey;
+  FFieldName := AFieldName;
+  FIsPrimaryKey := AIsPrimaryKey;
   FIsAutoIncrement := AIsAutoIncrement;
+  FAcceptNull := AAcceptNull;
 end;
 
 { TDBTable }
