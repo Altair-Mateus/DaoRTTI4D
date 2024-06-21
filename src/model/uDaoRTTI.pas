@@ -3,7 +3,11 @@ unit uDaoRTTI;
 interface
 
 uses
-  SysUtils, RTTI, Data.DB, FireDAC.Comp.Client, System.Variants,
+  SysUtils,
+  RTTI,
+  Data.DB,
+  FireDAC.Comp.Client,
+  System.Variants,
   uDBColumnAttribute,
   System.Classes;
 
@@ -18,7 +22,8 @@ type
     // Verifica se a property tem o atributo com o nome da coluna do Banco de dados
     function CheckColumnsAttribute(pProperty: TRttiProperty): Boolean;
     // Realiza a conversão do tipo Variant
-    function GetParameterValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
+    function GetParameterValue(const pObject: TObject;
+      const pProperty: TRttiProperty): Variant;
     // Localiza a property com o atributo de Primary Key no banco de dados
     function FindPrimaryKeyProperty(const pType: TRttiType): TRttiProperty;
 
@@ -42,7 +47,11 @@ type
     // Atualiza usando as propertys passada como parametro
     function DeleteByProp(const pObject: TObject): Boolean;
 
+    // Carrega os dados para as propertys usando a PK
     function LoadObjectByPK(const pObject: TObject): Boolean;
+
+    // Reseta o valor das propriedades deixando o valor padrao
+    procedure ResetPropertiesToDefault(const pObject: TObject);
 
     // Adiciona em um StringList as propertys que serão usadas no Where de um Update ou Delete
     procedure AddPropertyToWhere(const pPropertyName: string);
@@ -89,7 +98,7 @@ var
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
   lWhereClause: string;
-
+  lparamValue: Variant;
 begin
 
   Result := False;
@@ -157,12 +166,19 @@ begin
       lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
 
-      // Define parâmetros
+      // Definindo parâmetros
       for lProperty in lType.GetProperties do
       begin
         if CheckColumnsAttribute(lProperty) then
-          lQuery.Params.ParamByName(lProperty.Name).Value :=
-            GetParameterValue(pObject, lProperty);
+        begin
+          lparamValue := GetParameterValue(pObject, lProperty);
+
+          // Define o valor do parâmetro, ou NULL se for o caso
+          if VarIsNull(lparamValue) then
+            lQuery.Params.ParamByName(lProperty.Name).Clear // Define como NULL
+          else
+            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
+        end;
       end;
 
       lQuery.Prepare;
@@ -441,80 +457,58 @@ begin
 
 end;
 
-//function TDaoRTTI.GetParameterValue(const pObject: TObject;
-//  const pProperty: TRttiProperty): string;
-//begin
-//
-//  // Converte o Variant para tipos especificos para persistir no banco de dados
-//  if pProperty.GetValue(pObject).TypeInfo = TypeInfo(TDate) then
-//  begin
-//    Result := VarToStr(FormatDateTime('yyyy/mm/dd', pProperty.GetValue(pObject)
-//      .AsExtended));
-//  end
-//  else if pProperty.GetValue(pObject).TypeInfo = TypeInfo(TDateTime) then
-//  begin
-//    Result := VarToStr(FormatDateTime('yyyy/mm/dd hh:MM:ss',
-//      pProperty.GetValue(pObject).AsExtended));
-//  end
-//  else
-//  begin
-//    Result := VarToStr(pProperty.GetValue(pObject).AsVariant);
-//  end;
-//
-//end;
-
-function TDaoRTTI.GetParameterValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
+function TDaoRTTI.GetParameterValue(const pObject: TObject;
+  const pProperty: TRttiProperty): Variant;
 var
-  value: TValue;
+  Value: TValue;
   defaultDate: TDateTime;
 begin
-  value := pProperty.GetValue(pObject);
-
+  Value := pProperty.GetValue(pObject);
   // Verifica se a propriedade aceita nulos e se o valor é o valor padrão
   // que o Delphi atribui para a propriedade
   if pProperty.GetAttribute<TDBColumnAttribute>.AcceptNull then
   begin
-    case value.Kind of
+    case Value.Kind of
       tkInteger, tkInt64:
-        if value.AsInteger = 0 then
+        if Value.AsInteger = 0 then
         begin
           Result := Null;
-          Exit;
+          exit;
         end;
       tkFloat:
-        if (value.TypeInfo = TypeInfo(TDate)) or (value.TypeInfo = TypeInfo(TDateTime)) then
+        if (Value.TypeInfo = TypeInfo(TDate)) or
+          (Value.TypeInfo = TypeInfo(TDateTime)) then
         begin
           // Data padrao do delphi quando não é atribuido nada a propriedade do Obj
           defaultDate := EncodeDate(1899, 12, 30);
-          if value.AsExtended = defaultDate then
+          if Value.AsExtended = defaultDate then
           begin
             Result := Null;
-            Exit;
+            exit;
           end;
         end
-        else if value.AsExtended = 0 then
+        else if Value.AsExtended = 0 then
         begin
           Result := Null;
-          Exit;
+          exit;
         end;
       tkString, tkUString, tkLString, tkWString:
-        if value.AsString = '' then
+        if Value.AsString = '' then
         begin
           Result := Null;
-          Exit;
+          exit;
         end;
     end;
   end;
 
   // Converte o TValue para tipos específicos para persistir no banco de dados
-  if value.TypeInfo = TypeInfo(TDate) then
-    Result := FormatDateTime('yyyy/mm/dd', value.AsExtended)
-  else if value.TypeInfo = TypeInfo(TDateTime) then
-    Result := FormatDateTime('yyyy/mm/dd hh:MM:ss', value.AsExtended)
+  if Value.TypeInfo = TypeInfo(TDate) then
+    Result := FormatDateTime('yyyy/mm/dd', Value.AsExtended)
+  else if Value.TypeInfo = TypeInfo(TDateTime) then
+    Result := FormatDateTime('yyyy/mm/dd hh:MM:ss', Value.AsExtended)
   else
-    Result := value.AsVariant;
+    Result := Value.AsVariant;
 end;
-
 
 procedure TDaoRTTI.AddPropertyToWhere(const pPropertyName: string);
 begin
@@ -540,92 +534,6 @@ begin
       Result := True;
 
 end;
-
-//function TDaoRTTI.Insert(const pObject: TObject): Boolean;
-//var
-//  lContext: TRttiContext;
-//  lType: TRttiType;
-//  lProperty: TRttiProperty;
-//  lSQL, lColumns, lValues, lTable: string;
-//  lQuery: TFDQuery;
-//
-//begin
-//
-//  Result := False;
-//  lContext := TRttiContext.Create;
-//  lQuery := TFDQuery.Create(nil);
-//
-//  try
-//
-//    lType := lContext.GetType(pObject.ClassType);
-//
-//    // Verifica se a classe possui o atributo com o nome da tabela
-//    if not CheckTableAttribute(lType) then
-//    begin
-//      raise Exception.Create('Classe ' + lType.Name +
-//        ' está com o atributo TDBTable em branco ou insxistente!');
-//      exit;
-//    end;
-//
-//    lTable := lType.GetAttribute<TDBTable>.TableName;
-//    lColumns := '';
-//    lValues := '';
-//
-//    // Percorre as propertys para montar as colunas para o SQL
-//    for lProperty in lType.GetProperties do
-//    begin
-//
-//      // Verifica se a property possui o atributo com o nome da coluna e se a mesma não é PK
-//      if CheckColumnsAttribute(lProperty) then
-//      begin
-//        lColumns := lColumns + lProperty.GetAttribute<TDBColumnAttribute>.
-//          FieldName + ', ';
-//        lValues := lValues + ':' + lProperty.Name + ', ';
-//      end;
-//
-//    end;
-//
-//    // Remove a última vírgula
-//    lColumns := Copy(lColumns, 1, Length(lColumns) - 2);
-//    lValues := Copy(lValues, 1, Length(lValues) - 2);
-//
-//    // Monta a query
-//    lSQL := 'INSERT INTO ' + lTable + ' (' + lColumns + ') VALUES (' +
-//      lValues + ')';
-//
-//    try
-//
-//      lQuery.Connection := FConnection;
-//      lQuery.Close;
-//      lQuery.SQL.Clear;
-//      lQuery.SQL.Add(lSQL);
-//
-//      // Definindo parâmetros
-//      for lProperty in lType.GetProperties do
-//      begin
-//        if CheckColumnsAttribute(lProperty) then
-//            lQuery.Params.ParamByName(lProperty.Name).Value :=
-//              GetParameterValue(pObject, lProperty);
-//      end;
-//
-//      lQuery.Prepare;
-//      lQuery.ExecSQL;
-//
-//      Result := True;
-//
-//    except
-//      on E: Exception do
-//      begin
-//        raise Exception.Create('Erro ao Inserir registro na tabela  ' + lTable +
-//          E.Message);
-//      end;
-//    end;
-//  finally
-//    lQuery.Free;
-//    lContext.Free;
-//  end;
-//
-//end;
 
 function TDaoRTTI.Insert(const pObject: TObject): Boolean;
 var
@@ -662,7 +570,8 @@ begin
       // Verifica se a propriedade possui o atributo com o nome da coluna e se a mesma não é PK
       if CheckColumnsAttribute(lProperty) then
       begin
-        lColumns := lColumns + lProperty.GetAttribute<TDBColumnAttribute>.FieldName + ', ';
+        lColumns := lColumns + lProperty.GetAttribute<TDBColumnAttribute>.
+          FieldName + ', ';
         lValues := lValues + ':' + lProperty.Name + ', ';
       end;
     end;
@@ -672,7 +581,8 @@ begin
     lValues := Copy(lValues, 1, Length(lValues) - 2);
 
     // Monta a query
-    lSQL := 'INSERT INTO ' + lTable + ' (' + lColumns + ') VALUES (' + lValues + ')';
+    lSQL := 'INSERT INTO ' + lTable + ' (' + lColumns + ') VALUES (' +
+      lValues + ')';
 
     try
       lQuery.Connection := FConnection;
@@ -689,7 +599,7 @@ begin
 
           // Define o valor do parâmetro, ou NULL se for o caso
           if VarIsNull(lparamValue) then
-            lQuery.Params.ParamByName(lProperty.Name).Clear  // Define como NULL
+            lQuery.Params.ParamByName(lProperty.Name).Clear // Define como NULL
           else
             lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
         end;
@@ -702,7 +612,8 @@ begin
     except
       on E: Exception do
       begin
-        raise Exception.Create('Erro ao inserir registro na tabela ' + lTable + ': ' + E.Message);
+        raise Exception.Create('Erro ao inserir registro na tabela ' + lTable +
+          ': ' + E.Message);
       end;
     end;
   finally
@@ -710,8 +621,6 @@ begin
     lContext.Free;
   end;
 end;
-
-
 
 function TDaoRTTI.UpdateBySQLText(const pObject: TObject;
   const pWhereClause: string = ''): Boolean;
@@ -721,7 +630,7 @@ var
   lProperty: TRttiProperty;
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
-
+  lparamValue: Variant;
 begin
 
   Result := False;
@@ -772,12 +681,19 @@ begin
       lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
 
-      // Define parâmetros
+      // Definindo parâmetros
       for lProperty in lType.GetProperties do
       begin
         if CheckColumnsAttribute(lProperty) then
-          lQuery.Params.ParamByName(lProperty.Name).Value :=
-            GetParameterValue(pObject, lProperty);
+        begin
+          lparamValue := GetParameterValue(pObject, lProperty);
+
+          // Define o valor do parâmetro, ou NULL se for o caso
+          if VarIsNull(lparamValue) then
+            lQuery.Params.ParamByName(lProperty.Name).Clear // Define como NULL
+          else
+            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
+        end;
       end;
 
       lQuery.Prepare;
@@ -804,7 +720,7 @@ var
   lProperty, lPk: TRttiProperty;
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
-
+  lparamValue: Variant;
 begin
 
   Result := False;
@@ -858,13 +774,18 @@ begin
       lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
 
-      // Define parâmetros
+      // Definindo parâmetros
       for lProperty in lType.GetProperties do
       begin
         if CheckColumnsAttribute(lProperty) then
         begin
-          lQuery.Params.ParamByName(lProperty.Name).Value :=
-            GetParameterValue(pObject, lProperty);
+          lparamValue := GetParameterValue(pObject, lProperty);
+
+          // Define o valor do parâmetro, ou NULL se for o caso
+          if VarIsNull(lparamValue) then
+            lQuery.Params.ParamByName(lProperty.Name).Clear // Define como NULL
+          else
+            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
         end;
       end;
 
@@ -967,6 +888,64 @@ begin
     lQuery.Free;
   end;
 
+end;
+
+procedure TDaoRTTI.ResetPropertiesToDefault(const pObject: TObject);
+var
+  lContext: TRttiContext;
+  lType: TRttiType;
+  lProperty: TRttiProperty;
+  lValue: TValue;
+begin
+
+  lContext := TRttiContext.Create;
+  try
+    lType := lContext.GetType(pObject.ClassType);
+
+    for lProperty in lType.GetProperties do
+    begin
+      //  Verifica se a propriedade pode ser escrita e se tem o atributo
+      if (lProperty.IsWritable) and (CheckColumnsAttribute(lProperty)) then
+      begin
+        case lProperty.PropertyType.TypeKind of
+
+          tkInteger, tkInt64:
+            lValue := TValue.From<Integer>(0);
+
+          tkFloat:
+            if lProperty.PropertyType.Handle = TypeInfo(TDateTime) then
+              lValue := TValue.From<TDateTime>(0)
+            else if lProperty.PropertyType.Handle = TypeInfo(TDate) then
+              lValue := TValue.From<TDate>(0)
+            else
+              lValue := TValue.From<Double>(0.0);
+
+          tkChar, tkWChar:
+            lValue := TValue.From<WideChar>(#0);
+
+          tkString, tkUString, tkLString, tkWString:
+            lValue := TValue.From<string>('');
+
+          tkEnumeration:
+            if lProperty.PropertyType.Handle = TypeInfo(Boolean) then
+              lValue := TValue.From<Boolean>(False)
+            else
+              lValue := TValue.FromOrdinal(lProperty.PropertyType.Handle, 0);
+
+          tkVariant:
+            lValue := TValue.Empty;
+        else
+          Continue;
+        end;
+
+        //  Seta o valor na property
+        lProperty.SetValue(pObject, lValue);
+      end;
+    end;
+
+  finally
+    lContext.Free;
+  end;
 end;
 
 end.
