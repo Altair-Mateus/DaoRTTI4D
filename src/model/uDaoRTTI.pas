@@ -821,7 +821,6 @@ var
   lQuery: TFDQuery;
 
 begin
-
   Result := False;
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
@@ -861,17 +860,22 @@ begin
       lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
       lQuery.Params.ParamByName(lProperty.Name).Value :=
-        GetParameterValue(pObject, lProperty);;
+        GetParameterValue(pObject, lProperty);
       lQuery.Open;
 
       // Atribui os valores das colunas às propriedades do objeto
       for lProperty in lType.GetProperties do
       begin
-        if not lQuery.FieldByName
-          (lProperty.GetAttribute<TDBColumnAttribute>.FieldName).IsNull then
-          lProperty.SetValue(pObject,
-            TValue.FromVariant(lQuery.FieldByName
-            (lProperty.GetAttribute<TDBColumnAttribute>.FieldName).Value));
+        if lQuery.FindField(lProperty.GetAttribute<TDBColumnAttribute>.FieldName) <> nil then
+        begin
+          if not lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).IsNull then
+          begin
+            if (lProperty.PropertyType.TypeKind = tkFloat) and (lProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
+                lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).AsDateTime))
+            else
+              lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).Value));
+          end;
+        end;
       end;
 
       Result := True;
