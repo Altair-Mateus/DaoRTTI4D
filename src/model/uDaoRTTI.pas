@@ -102,6 +102,10 @@ var
 begin
 
   Result := False;
+  lSQL := '';
+  lSets := '';
+  lTable := '';
+  lWhereClause := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
 
@@ -119,7 +123,6 @@ begin
     end;
 
     lTable := lType.GetAttribute<TDBTable>.TableName;
-    lSets := '';
 
     // Percorre as propriedades para montar a cláusula SET do update
     for lProperty in lType.GetProperties do
@@ -135,7 +138,6 @@ begin
     lSets := Copy(lSets, 1, Length(lSets) - 2);
 
     // Constrói a cláusula WHERE baseada na lista de propriedades fornecida
-    lWhereClause := '';
     for lProperty in lType.GetProperties do
     begin
       if CheckColumnsAttribute(lProperty) and
@@ -205,13 +207,15 @@ var
   lPk: TRttiProperty;
   lSQL, lTable: String;
   lQuery: TFDQuery;
-
+  lPkValue : Variant;
 begin
 
   Result := False;
+  lSQL := '';
+  lTable := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
-
+  lPkValue := 0;
   try
 
     // Localiza a classe
@@ -236,6 +240,15 @@ begin
       exit;
     end;
 
+     // Pega a ID associada a propriedade PK
+    lPkValue := GetParameterValue(pObject, lPk);
+
+    if (lPkValue <= 0) then
+    begin
+      raise Exception.Create('Id da PK não pode ser menor ou igual a zero!');
+      exit;
+    end;
+
     lTable := lType.GetAttribute<TDBTable>.TableName;
 
     // Monta o SQL para o Delete
@@ -250,8 +263,7 @@ begin
       lQuery.SQL.Add(lSQL);
 
       // Parametro da PK
-      lQuery.Params.ParamByName(lPk.Name).Value :=
-        GetParameterValue(pObject, lPk);
+      lQuery.Params.ParamByName(lPk.Name).Value := lPkValue;
 
       lQuery.Prepare;
       lQuery.ExecSQL;
@@ -284,6 +296,9 @@ var
 begin
 
   Result := False;
+  lSQL := '';
+  lTable := '';
+  lWhereClause := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
 
@@ -303,7 +318,6 @@ begin
     lTable := lType.GetAttribute<TDBTable>.TableName;
 
     // Constrói a cláusula WHERE baseada na lista de propriedades fornecida
-    lWhereClause := '';
     for lProperty in lType.GetProperties do
     begin
       if (CheckColumnsAttribute(lProperty)) and
@@ -377,6 +391,8 @@ var
 begin
 
   Result := False;
+  lSQL := '';
+  lTable := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
 
@@ -464,17 +480,20 @@ var
   defaultDate: TDateTime;
 begin
   Value := pProperty.GetValue(pObject);
+
   // Verifica se a propriedade aceita nulos e se o valor é o valor padrão
   // que o Delphi atribui para a propriedade
   if pProperty.GetAttribute<TDBColumnAttribute>.AcceptNull then
   begin
     case Value.Kind of
+
       tkInteger, tkInt64:
         if Value.AsInteger = 0 then
         begin
           Result := Null;
           exit;
         end;
+
       tkFloat:
         if (Value.TypeInfo = TypeInfo(TDate)) or
           (Value.TypeInfo = TypeInfo(TDateTime)) then
@@ -492,6 +511,7 @@ begin
           Result := Null;
           exit;
         end;
+
       tkString, tkUString, tkLString, tkWString:
         if Value.AsString = '' then
         begin
@@ -527,9 +547,10 @@ begin
 
   Result := False;
   lAttr := pProperty.GetAttribute<TDBColumnAttribute>;
+
   // Verifica se a property possui o atributo com o nome da coluna
   if Assigned(lAttr) then
-    // Verifica se o atributo não é PK
+    // Verifica se o atributo não é Auto incremento
     if (not lAttr.IsAutoIncrement) then
       Result := True;
 
@@ -546,6 +567,9 @@ var
 
 begin
   Result := False;
+  lColumns := '';
+  lSQL := '';
+  lTable := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
 
@@ -561,8 +585,6 @@ begin
     end;
 
     lTable := lType.GetAttribute<TDBTable>.TableName;
-    lColumns := '';
-    lValues := '';
 
     // Percorre as propriedades para montar as colunas para o SQL
     for lProperty in lType.GetProperties do
@@ -634,6 +656,9 @@ var
 begin
 
   Result := False;
+  lSets := '';
+  lSQL := '';
+  lTable := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
 
@@ -657,7 +682,6 @@ begin
     end;
 
     lTable := lType.GetAttribute<TDBTable>.TableName;
-    lSets := '';
 
     // Percorre as propriedades para montar a cláusula SET do update
     for lProperty in lType.GetProperties do
@@ -721,12 +745,16 @@ var
   lSQL, lSets, lTable: string;
   lQuery: TFDQuery;
   lparamValue: Variant;
+  lPkValue : Variant;
 begin
 
   Result := False;
+  lSets := '';
+  lSQL := '';
+  lTable := '';
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
-
+  lPkValue := 0;
   try
     lType := lContext.GetType(pObject.ClassType);
 
@@ -748,8 +776,16 @@ begin
       exit;
     end;
 
+    // Pega a ID associada a propriedade PK
+    lPkValue := GetParameterValue(pObject, lPk);
+
+    if (lPkValue <= 0) then
+    begin
+      raise Exception.Create('Id da PK não pode ser menor ou igual a zero!');
+      exit;
+    end;
+
     lTable := lType.GetAttribute<TDBTable>.TableName;
-    lSets := '';
 
     // Percorre as propriedades para montar a cláusula SET do update
     for lProperty in lType.GetProperties do
@@ -790,8 +826,7 @@ begin
       end;
 
       // Parametro da PK
-      lQuery.Params.ParamByName(lPk.Name).Value :=
-        GetParameterValue(pObject, lPk);
+      lQuery.Params.ParamByName(lPk.Name).Value := lPkValue;
 
       lQuery.Prepare;
       lQuery.ExecSQL;
@@ -817,13 +852,16 @@ var
   lContext: TRttiContext;
   lType: TRttiType;
   lProperty: TRttiProperty;
-  lSQL, lTable: string;
+  lSQL, lTable, lFieldName: string;
   lQuery: TFDQuery;
 
 begin
   Result := False;
   lContext := TRttiContext.Create;
   lQuery := TFDQuery.Create(nil);
+  lFieldName := '';
+  lSQL := '';
+  lTable := '';
 
   try
     lType := lContext.GetType(pObject.ClassType);
@@ -859,26 +897,31 @@ begin
       lQuery.Close;
       lQuery.SQL.Clear;
       lQuery.SQL.Add(lSQL);
-      lQuery.Params.ParamByName(lProperty.Name).Value :=
-        GetParameterValue(pObject, lProperty);
+      lQuery.Params.ParamByName(lProperty.Name).Value := GetParameterValue(pObject, lProperty);
       lQuery.Open;
 
-      // Atribui os valores das colunas às propriedades do objeto
-      for lProperty in lType.GetProperties do
+      if lQuery.RecordCount > 0 then
       begin
-        if lQuery.FindField(lProperty.GetAttribute<TDBColumnAttribute>.FieldName) <> nil then
+        Result := True;
+
+        // Atribui os valores das colunas às propriedades do objeto
+        for lProperty in lType.GetProperties do
         begin
-          if not lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).IsNull then
+          lFieldName := lProperty.GetAttribute<TDBColumnAttribute>.FieldName;
+
+          if lQuery.FindField(lFieldName) <> nil then
           begin
-            if (lProperty.PropertyType.TypeKind = tkFloat) and (lProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
-                lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).AsDateTime))
-            else
-              lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lProperty.GetAttribute<TDBColumnAttribute>.FieldName).Value));
+            if not lQuery.FieldByName(lFieldName).IsNull then
+            begin
+              //  Verificação de propriedades do tipo Data
+              if (lProperty.PropertyType.TypeKind = tkFloat) and (lProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
+                  lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lFieldName).AsDateTime))
+              else
+                lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lFieldName).Value));
+            end;
           end;
         end;
       end;
-
-      Result := True;
 
     except
       on E: Exception do
