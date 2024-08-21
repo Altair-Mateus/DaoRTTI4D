@@ -68,6 +68,12 @@ type
 
 implementation
 
+  {
+    A classe uDaoRTTI tem por objetivo otimizar e facilitar os processos com o
+    banco de dados utilizando RTTI, para que o desenvolvedor tenha mais facilidade
+    ao criar novas campos ou tabelas em seu banco de dados de maneira fácil e prática.
+  }
+
 uses
   Vcl.Dialogs;
 
