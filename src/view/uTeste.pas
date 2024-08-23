@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, uDBColumnAttribute;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, uDBAttributes;
 
 type
   TForm1 = class(TForm)
@@ -69,29 +69,23 @@ end;
 procedure TForm1.btnInsertClick(Sender: TObject);
 var
   lUsuario : TUsuario;
-
 begin
-
   lUsuario := TUsuario.Create;
-
   try
 
     lUsuario.Nome := 'Mateus';
     lUsuario.Login := '10';
     lUsuario.Senha := '12345';
     lUsuario.Status := 'A';
-    lUsuario.Data_Cadastro := now;
-//    lUsuario.Senha_Temp := 'N';
+    lUsuario.Data_Cadastro := Now;
     lUsuario.User_Admin := 'N';
 
-    if lUsuario.Insert then
+    if (lUsuario.Insert) then
       ShowMessage('Registro gravado')
 
   finally
     lUsuario.Free;
-
   end;
-
 end;
 
 procedure TForm1.btnUpdateSQLClick(Sender: TObject);

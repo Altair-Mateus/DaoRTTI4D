@@ -1,4 +1,4 @@
-unit uDBColumnAttribute;
+unit uDBAttributes;
 
 interface
 
@@ -40,7 +40,7 @@ type
 implementation
 
 {
-  A classe uDBColumnAttribute tem por objetivo criar atributos personalizados
+  A classe uDBAttributes tem por objetivo criar atributos personalizados
   que irão auxiliar a Classse uDaoRTTI para realizar as operações com o banco
   de dados. A mesma indica as propriedades das tabelas e colunas do banco de dados.
 }

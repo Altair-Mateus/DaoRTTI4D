@@ -3,7 +3,7 @@ unit uUsuario;
 interface
 
 uses
-  uDBColumnAttribute, uDaoRTTI, SistemaFinanceiro.Model.uSFQuery,
+  uDBAttributes, uDaoRTTI, SistemaFinanceiro.Model.uSFQuery,
   System.SysUtils, Vcl.Forms, Winapi.Windows, BCrypt;
 
 type

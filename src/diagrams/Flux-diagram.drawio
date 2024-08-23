@@ -1,0 +1,626 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.5 Chrome/126.0.6478.183 Electron/31.3.0 Safari/537.36" version="24.7.5">
+  <diagram name="Página-1" id="8Z50LHTDVgT2bBchwuNP">
+    <mxGraphModel dx="3341" dy="1497" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AVvesptkApPsGRgY-4vz-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-1" target="AVvesptkApPsGRgY-4vz-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-158" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-1" target="AVvesptkApPsGRgY-4vz-100">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-159" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-1" target="AVvesptkApPsGRgY-4vz-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-221" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-1" target="AVvesptkApPsGRgY-4vz-161">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-1" value="Escolha da&amp;nbsp;&lt;div&gt;operação&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="70" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-2" target="AVvesptkApPsGRgY-4vz-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-2" value="Insert" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-660" y="290" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-4" target="AVvesptkApPsGRgY-4vz-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-4" target="AVvesptkApPsGRgY-4vz-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-4" value="Checa se a entidade que chamou possui atributo da tabela." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-665" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-6" target="AVvesptkApPsGRgY-4vz-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-6" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-540" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-212" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-50" y="1852.857142857143" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-510" y="1853" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-8" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-560" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-12" target="AVvesptkApPsGRgY-4vz-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-12" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-730" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-14" target="AVvesptkApPsGRgY-4vz-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-14" value="Usando RTTI monta a query de Insert percorrendo todas as propriedades que possuem o atributo da coluna." style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-750" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-16" target="AVvesptkApPsGRgY-4vz-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-16" value="Usando RTTI realiza a definição dos parâmetros e dos valores atribuidos às propriedades." style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-750" y="730" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-18" target="AVvesptkApPsGRgY-4vz-20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-690" y="930" />
+              <mxPoint x="-600" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-18" target="AVvesptkApPsGRgY-4vz-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-18" value="Roda a query no banco de dados e aguarda o retorno." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-750" y="850" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-20" target="AVvesptkApPsGRgY-4vz-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-20" value="Sucesso" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-640" y="940" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-30" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-22" target="AVvesptkApPsGRgY-4vz-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-22" value="Falha" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="940" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-24" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-600" y="1850" />
+              <mxPoint x="-50" y="1850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-24" value="Finaliza os processos e retorna que foi executado com sucesso a entidade." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-660" y="1090" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-29" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro.&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="1090" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-38" target="AVvesptkApPsGRgY-4vz-41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-38" value="Update By PK" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-300" y="290" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-41" target="AVvesptkApPsGRgY-4vz-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-41" target="AVvesptkApPsGRgY-4vz-46">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-41" value="Checa se a entidade que chamou possui atributo da tabela." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-305" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-43" target="AVvesptkApPsGRgY-4vz-44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-43" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-180" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-218" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-44">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="1860" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-100" y="1860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-44" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-200" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-77" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-46" target="AVvesptkApPsGRgY-4vz-76">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-46" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-47" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="AVvesptkApPsGRgY-4vz-50">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-340" y="500" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-60" value="Fim" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-50" y="1800" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.625;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-29" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-98" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-64" target="AVvesptkApPsGRgY-4vz-66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-64" value="Usando RTTI monta a query de Update percorrendo todas as propriedades que possuem o atributo da coluna." style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-450" y="1070" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-65" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-66" target="AVvesptkApPsGRgY-4vz-69">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-66" value="Usando RTTI realiza a definição dos parâmetros e dos valores atribuidos às propriedades." style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-450" y="1170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-67" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-69" target="AVvesptkApPsGRgY-4vz-71">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-390" y="1370" />
+              <mxPoint x="-300" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-68" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-69" target="AVvesptkApPsGRgY-4vz-73">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-69" value="Roda a query no banco de dados e aguarda o retorno." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-450" y="1290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-70" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-71" target="AVvesptkApPsGRgY-4vz-74">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-71" value="Sucesso" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-340" y="1380" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-72" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-73" target="AVvesptkApPsGRgY-4vz-75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-73" value="Falha" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-470" y="1380" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-74" value="Finaliza os processos e retorna que foi executado com sucesso a entidade." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-360" y="1530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-75" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-450" y="1840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-75" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro.&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-490" y="1530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-80" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-76" target="AVvesptkApPsGRgY-4vz-78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-76" target="AVvesptkApPsGRgY-4vz-79">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-76" value="Checa se a entidade que chamou possui uma propriedade com o atributo de PK." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-390" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-85" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-78" target="AVvesptkApPsGRgY-4vz-84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-78" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-430" y="730" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-79" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-270" y="730" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-87" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-84" target="AVvesptkApPsGRgY-4vz-86">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-84" target="AVvesptkApPsGRgY-4vz-93">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-84" value="Checa se o valor da PK é maior que zero." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-450" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-86" target="AVvesptkApPsGRgY-4vz-64">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-86" value="Sim" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-430" y="950" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-93" value="Não" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="950" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-95" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-310" y="1070" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.167;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-93" target="AVvesptkApPsGRgY-4vz-95">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-99" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-100" target="AVvesptkApPsGRgY-4vz-103">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-100" value="Delet By PK" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="290" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-101" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-103" target="AVvesptkApPsGRgY-4vz-105">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-102" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-103" target="AVvesptkApPsGRgY-4vz-108">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-103" value="Checa se a entidade que chamou possui atributo da tabela." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="95" y="420" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-104" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-105" target="AVvesptkApPsGRgY-4vz-106">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-105" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-142" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-106" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="1868" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-106" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-107" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-108" target="AVvesptkApPsGRgY-4vz-121">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-108" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="500" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-113" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-114" target="AVvesptkApPsGRgY-4vz-117">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-114" value="Sucesso" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1380" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-115" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-116" target="AVvesptkApPsGRgY-4vz-118">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-116" value="Falha" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="1380" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-216" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-117" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-117" value="Finaliza os processos e retorna que foi executado com sucesso a entidade." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-118" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro.&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-90" y="1530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-119" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-121" target="AVvesptkApPsGRgY-4vz-123">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-120" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-121" target="AVvesptkApPsGRgY-4vz-124">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-121" value="Checa se a entidade que chamou possui uma propriedade com o atributo de PK." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-122" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-123" target="AVvesptkApPsGRgY-4vz-127">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-123" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-30" y="730" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-153" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-124" target="AVvesptkApPsGRgY-4vz-152">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-124" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="730" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-125" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-127" target="AVvesptkApPsGRgY-4vz-129">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-126" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-127" target="AVvesptkApPsGRgY-4vz-130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-127" value="Checa se o valor da PK é maior que zero." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-50" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-129" target="AVvesptkApPsGRgY-4vz-134">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-129" value="Sim" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-30" y="950" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-130" value="Não" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="950" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-144" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-131" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="1870" />
+              <mxPoint x="70" y="1870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-131" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1070" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-132" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.167;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-130" target="AVvesptkApPsGRgY-4vz-131">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-133" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-134" target="AVvesptkApPsGRgY-4vz-136">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-134" value="Usando RTTI monta a query de delete" style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="1070" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-135" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-136" target="AVvesptkApPsGRgY-4vz-137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-136" value="Usando RTTI realiza a definição do parâmetro o valor atribuído a propriedade marcada como PK" style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="1170" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-138" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-137" target="AVvesptkApPsGRgY-4vz-116">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-139" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-137" target="AVvesptkApPsGRgY-4vz-114">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-10" y="1370" />
+              <mxPoint x="100" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-137" value="Roda a query no banco de dados e aguarda o retorno." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="-70" y="1290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-148" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-280" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-149" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.431;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-79" target="AVvesptkApPsGRgY-4vz-148">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-151" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.064;entryY=0.225;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-148" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-120" y="870" />
+              <mxPoint x="-120" y="1818" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-152" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-154" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.982;entryY=0.655;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-152" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="870" />
+              <mxPoint x="260" y="1870" />
+              <mxPoint x="68" y="1870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-160" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-161" target="AVvesptkApPsGRgY-4vz-164">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-161" value="Load By PK" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="283" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-162" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-164" target="AVvesptkApPsGRgY-4vz-166">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-163" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-164" target="AVvesptkApPsGRgY-4vz-169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-164" value="Checa se a entidade que chamou possui atributo da tabela." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="545" y="413" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-165" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-166" target="AVvesptkApPsGRgY-4vz-167">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-166" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="493" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-209" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-167" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="1868" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-167" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="623" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-168" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-169" target="AVvesptkApPsGRgY-4vz-178">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-169" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="493" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-170" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-171" target="AVvesptkApPsGRgY-4vz-174">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-171" value="Sucesso" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="510" y="1263" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-172" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-173" target="AVvesptkApPsGRgY-4vz-175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-173" value="Falha" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1263" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-203" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-174" target="AVvesptkApPsGRgY-4vz-202">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-174" value="Usando RTTI atribui o valor de cada coluna a sua respctiva propriedade da entidade usando o atributo da coluna" style="whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="490" y="1413" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-219" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-175">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="1850" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="420" y="1850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-175" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro.&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1413" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-176" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-178" target="AVvesptkApPsGRgY-4vz-179">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-177" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-178" target="AVvesptkApPsGRgY-4vz-181">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-178" value="Checa se a entidade que chamou possui uma propriedade com o atributo de PK." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="623" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-198" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-179" target="AVvesptkApPsGRgY-4vz-184">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-179" value="Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="723" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-180" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-181" target="AVvesptkApPsGRgY-4vz-197">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-181" value="Não Possui" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="723" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-182" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-184" target="AVvesptkApPsGRgY-4vz-186">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-183" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-184" target="AVvesptkApPsGRgY-4vz-187">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-184" value="Checa se o valor da PK é maior que zero." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="833" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-199" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-186" target="AVvesptkApPsGRgY-4vz-191">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-186" value="Sim" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="943" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-187" value="Não" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="943" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-220" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-188" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="1093" />
+              <mxPoint x="730" y="1840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-188" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="1063" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-189" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.167;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-187" target="AVvesptkApPsGRgY-4vz-188">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-200" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-191" target="AVvesptkApPsGRgY-4vz-196">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-191" value="Usando RTTI monta a query de Select" style="whiteSpace=wrap;html=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1063" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-194" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-196" target="AVvesptkApPsGRgY-4vz-173">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-195" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-196" target="AVvesptkApPsGRgY-4vz-171">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="1253" />
+              <mxPoint x="550" y="1253" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-196" value="Roda a query no banco de dados e aguarda o retorno." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1173" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-223" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-197" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="730" y="863" />
+              <mxPoint x="730" y="1840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-197" value="Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="833" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-208" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-201">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625" y="1633" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-201" value="Sucesso" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="585" y="1523" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-202" value="Falha" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="480" y="1523" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-204" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.51;entryY=0.073;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-174" target="AVvesptkApPsGRgY-4vz-201">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-211" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-205" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="1868" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-205" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Levanta uma exceção, retorna a entidade a falha e mostra a tela de erro.&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1637" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-206" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.576;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-202" target="AVvesptkApPsGRgY-4vz-205">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-210" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-207" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="1868" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-207" value="Finaliza os processos e retorna que foi executado com sucesso a entidade." style="whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="585" y="1637" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-214" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.467;entryY=-0.03;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-118" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-215" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.467;entryY=-0.021;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AVvesptkApPsGRgY-4vz-74" target="AVvesptkApPsGRgY-4vz-60">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-300" y="1798" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AVvesptkApPsGRgY-4vz-217" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.432;entryY=0.056;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-202" y="1125.5" as="sourcePoint" />
+            <mxPoint x="-0.16000000000008185" y="1799.98" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-202" y="1800.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

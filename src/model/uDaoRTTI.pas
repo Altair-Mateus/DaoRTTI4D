@@ -8,7 +8,7 @@ uses
   Data.DB,
   FireDAC.Comp.Client,
   System.Variants,
-  uDBColumnAttribute,
+  uDBAttributes,
   System.Classes;
 
 type
@@ -40,8 +40,7 @@ type
     function UpdateByProp(const pObject: TObject): Boolean;
 
     // Deleta com base no SQL passado por parametro
-    function DeleteBySQLText(const pObject: TObject;
-      const pWhereClause: string = ''): Boolean;
+    function DeleteBySQLText(const pObject: TObject; const pWhereClause: string = ''): Boolean;
     // Deleta usando a property mapeada como Primary Key na property
     function DeleteByPK(const pObject: TObject): Boolean;
     // Atualiza usando as propertys passada como parametro
