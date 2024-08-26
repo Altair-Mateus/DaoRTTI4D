@@ -27,18 +27,7 @@ type
     TEMP_PASSWORD = '12345';
   public
 
-    function Insert: Boolean;
-    function UpdateBySQLText(const pWhereClause: string = ''): Boolean;
-    function UpdateByPK: Boolean;
-    function UpdateByProp: Boolean;
-    function DeleteBySQLText(const pWhere: String = ''): Boolean;
-    function DeleteByPk: Boolean;
-    function DeleteByProp: Boolean;
-    function LoadObjectByPK: Boolean;
-    procedure ResetPropertiesToDefault;
-    procedure AddPropertyToWhere(const APropertyName: String);
-
-    [TDBColumnAttribute('ID', True, True)]
+    [TDBColumnAttribute('ID', True)]
     property Id: Integer read FId write FId;
     [TDBColumnAttribute('NOME')]
     property Nome: String read FNome write FNome;
@@ -50,10 +39,21 @@ type
     property Status: String read FStatus write FStatus;
     [TDBColumnAttribute('DATA_CADASTRO')]
     property Data_Cadastro: TDate read FData_Cadastro write FData_Cadastro;
-    [TDBColumnAttribute('SENHA_TEMP', False, False, True)]
+//    [TDBColumnAttribute('SENHA_TEMP', False, False, True)]
     property Senha_Temp: String read FSenha_Temp write FSenha_Temp;
-    [TDBColumnAttribute('USER_ADMIN', False, False, True)]
+//    [TDBColumnAttribute('USER_ADMIN', False, False, True)]
     property User_Admin: String read FUser_Admin write FUser_Admin;
+
+    function Insert: Boolean;
+    function UpdateBySQLText(const pWhereClause: string = ''): Boolean;
+    function UpdateByPK: Boolean;
+    function UpdateByProp: Boolean;
+    function DeleteBySQLText(const pWhere: String = ''): Boolean;
+    function DeleteByPk: Boolean;
+    function DeleteByProp: Boolean;
+    function LoadObjectByPK: Boolean;
+    procedure ResetPropertiesToDefault;
+    procedure AddPropertyToWhere(const APropertyName: String);
 
     constructor Create;
     destructor Destroy; override;
@@ -97,8 +97,7 @@ begin
   inherited;
 end;
 
-function TUsuario.Existe(const pId: Integer;
-  const pCarrega: Boolean): Boolean;
+function TUsuario.Existe(const pId: Integer; const pCarrega: Boolean): Boolean;
 var
   lQuery: TSFQuery;
 begin

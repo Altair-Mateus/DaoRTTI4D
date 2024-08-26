@@ -1,4 +1,4 @@
-unit uTeste;
+unit fTesteDaoRTTI;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, uDBAttributes;
 
 type
-  TForm1 = class(TForm)
+  TfrmTesteDaoRTTI = class(TForm)
     btnInsert: TButton;
     btnUpdateSQL: TButton;
     btnDeleteSQL: TButton;
@@ -31,7 +31,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmTesteDaoRTTI: TfrmTesteDaoRTTI;
 
 implementation
 
@@ -39,7 +39,7 @@ implementation
 
 uses uUsuario;
 
-procedure TForm1.btnDeletePropClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnDeletePropClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -66,19 +66,19 @@ begin
 
 end;
 
-procedure TForm1.btnInsertClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnInsertClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 begin
   lUsuario := TUsuario.Create;
   try
-
+    lUsuario.Id := 11;
     lUsuario.Nome := 'Mateus';
     lUsuario.Login := '10';
     lUsuario.Senha := '12345';
     lUsuario.Status := 'A';
     lUsuario.Data_Cadastro := Now;
-    lUsuario.User_Admin := 'N';
+//    lUsuario.User_Admin := 'N';
 
     if (lUsuario.Insert) then
       ShowMessage('Registro gravado')
@@ -88,7 +88,7 @@ begin
   end;
 end;
 
-procedure TForm1.btnUpdateSQLClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnUpdateSQLClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -117,7 +117,7 @@ begin
 
 end;
 
-procedure TForm1.btnDeleteSQLClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnDeleteSQLClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -140,7 +140,7 @@ begin
 
 end;
 
-procedure TForm1.btnLoadClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnLoadClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -162,7 +162,7 @@ begin
 
 end;
 
-procedure TForm1.btnUpdatePKClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnUpdatePKClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -172,7 +172,7 @@ begin
 
   try
 
-    lUsuario.Id := 3;
+    lUsuario.Id := 10;
     lUsuario.Nome := 'teste UpdateByPK';
     lUsuario.Login := '10';
     lUsuario.Senha := 'batata';
@@ -191,7 +191,7 @@ begin
 
 end;
 
-procedure TForm1.btnUpdatePropClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnUpdatePropClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -222,7 +222,7 @@ begin
 
 end;
 
-procedure TForm1.btnDeleteByPKClick(Sender: TObject);
+procedure TfrmTesteDaoRTTI.btnDeleteByPKClick(Sender: TObject);
 var
   lUsuario : TUsuario;
 
@@ -232,7 +232,7 @@ begin
 
   try
 
-    lUsuario.Id := 9;
+    lUsuario.Id := 10;
 
 
     if lUsuario.DeleteByPk then

@@ -79,14 +79,9 @@ uses
 function TDaoRTTI.CheckTableAttribute(pType: TRttiType): Boolean;
 begin
 
-  Result := False;
-
   // Verifica se a classe possui o atributo com o nome da tabela
-  if (pType.HasAttribute<TDBTable>) and
-    (pType.GetAttribute<TDBTable>.TableName <> '') then
-  begin
-    Result := True;
-  end;
+  Result := (pType.HasAttribute<TDBTable>) and
+    (pType.GetAttribute<TDBTable>.TableName <> '');
 
 end;
 
@@ -486,48 +481,10 @@ var
 begin
   Value := pProperty.GetValue(pObject);
 
-  // Verifica se a propriedade aceita nulos e se o valor é o valor padrão
-  // que o Delphi atribui para a propriedade
-  if pProperty.GetAttribute<TDBColumnAttribute>.AcceptNull then
-  begin
-    case Value.Kind of
-
-      tkInteger, tkInt64:
-        if Value.AsInteger = 0 then
-        begin
-          Result := Null;
-          exit;
-        end;
-
-      tkFloat:
-        if (Value.TypeInfo = TypeInfo(TDate)) or
-          (Value.TypeInfo = TypeInfo(TDateTime)) then
-        begin
-          // Data padrao do delphi quando não é atribuido nada a propriedade do Obj
-          defaultDate := EncodeDate(1899, 12, 30);
-          if Value.AsExtended = defaultDate then
-          begin
-            Result := Null;
-            exit;
-          end;
-        end
-        else if Value.AsExtended = 0 then
-        begin
-          Result := Null;
-          exit;
-        end;
-
-      tkString, tkUString, tkLString, tkWString:
-        if Value.AsString = '' then
-        begin
-          Result := Null;
-          exit;
-        end;
-    end;
-  end;
-
   // Converte o TValue para tipos específicos para persistir no banco de dados
-  if Value.TypeInfo = TypeInfo(TDate) then
+  if pProperty.GetAttribute<TDBColumnAttribute>.AcceptNull then
+    Result := Null
+  else if Value.TypeInfo = TypeInfo(TDate) then
     Result := FormatDateTime('yyyy/mm/dd', Value.AsExtended)
   else if Value.TypeInfo = TypeInfo(TDateTime) then
     Result := FormatDateTime('yyyy/mm/dd hh:MM:ss', Value.AsExtended)
@@ -549,15 +506,11 @@ function TDaoRTTI.CheckColumnsAttribute(pProperty: TRttiProperty): Boolean;
 var
   lAttr: TDBColumnAttribute;
 begin
-
-  Result := False;
   lAttr := pProperty.GetAttribute<TDBColumnAttribute>;
 
   // Verifica se a property possui o atributo com o nome da coluna
-  if Assigned(lAttr) then
-    // Verifica se o atributo não é Auto incremento
-    if (not lAttr.IsAutoIncrement) then
-      Result := True;
+  // Verifica se o atributo não é Auto incremento
+  Result := (Assigned(lAttr)) and (not lAttr.IsAutoIncrement);
 
 end;
 
