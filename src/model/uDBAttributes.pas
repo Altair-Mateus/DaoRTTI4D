@@ -6,7 +6,7 @@ uses
   System.SysUtils;
 
 type
-  //  Atributo para a coluna da tabela
+  // Atributo para a coluna da tabela
   TDBColumnAttribute = class(TCustomAttribute)
   private
     FIsPrimaryKey: Boolean;
@@ -15,17 +15,10 @@ type
     FAcceptNull: Boolean;
 
   public
-    constructor Create(const AFieldName: string; AIsPrimaryKey: Boolean = False;
-      AIsAutoIncrement: Boolean = False; AAcceptNull: Boolean = False);
+    constructor Create(const AFieldName: string);
 
-    //  Nome da coluna no banco de dados
+    // Nome da coluna no banco de dados
     property FieldName: string read FFieldName;
-    //  Indica se a coluna é Primary Key ou não
-    property IsPrimaryKey: Boolean read FIsPrimaryKey;
-    // Indica se a coluna é auto incremento ou não
-    property IsAutoIncrement: Boolean read FIsAutoIncrement;
-    // Indica se a coluna aceita valores Nulos no Insert/Update
-    property AcceptNull: Boolean read FAcceptNull write FAcceptNull;
   end;
 
   // Atributo que armazena o nome da tabela
@@ -37,6 +30,18 @@ type
     property TableName: String read FTableName write FTableName;
   end;
 
+  // Atributo que Indica se a coluna é Primary Key ou não
+  TDBIsPrimaryKey = class(TCustomAttribute)
+  end;
+
+  // Atributo que Indica se a coluna é auto incremento ou não
+  TDBIsAutoIncrement = class(TCustomAttribute)
+  end;
+
+  // Atributo que  Indica se a coluna aceita valores Nulos no Insert/Update
+  TDBAcceptNull = class(TCustomAttribute)
+  end;
+
 implementation
 
 {
@@ -45,13 +50,9 @@ implementation
   de dados. A mesma indica as propriedades das tabelas e colunas do banco de dados.
 }
 
-constructor TDBColumnAttribute.Create(const AFieldName: string; AIsPrimaryKey: Boolean = False;
-      AIsAutoIncrement: Boolean = False; AAcceptNull: Boolean = False);
+constructor TDBColumnAttribute.Create(const AFieldName: string);
 begin
   FFieldName := AFieldName;
-  FIsPrimaryKey := AIsPrimaryKey;
-  FIsAutoIncrement := AIsAutoIncrement;
-  FAcceptNull := AAcceptNull;
 end;
 
 { TDBTable }

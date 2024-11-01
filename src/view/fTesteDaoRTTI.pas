@@ -78,7 +78,7 @@ begin
     lUsuario.Senha := '12345';
     lUsuario.Status := 'A';
     lUsuario.Data_Cadastro := Now;
-//    lUsuario.User_Admin := 'N';
+    lUsuario.User_Admin := 'N';
 
     if (lUsuario.Insert) then
       ShowMessage('Registro gravado')

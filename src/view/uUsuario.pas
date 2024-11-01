@@ -27,7 +27,7 @@ type
     TEMP_PASSWORD = '12345';
   public
 
-    [TDBColumnAttribute('ID', True)]
+    [TDBColumnAttribute('ID'), TDBIsPrimaryKey]
     property Id: Integer read FId write FId;
     [TDBColumnAttribute('NOME')]
     property Nome: String read FNome write FNome;
@@ -39,9 +39,9 @@ type
     property Status: String read FStatus write FStatus;
     [TDBColumnAttribute('DATA_CADASTRO')]
     property Data_Cadastro: TDate read FData_Cadastro write FData_Cadastro;
-//    [TDBColumnAttribute('SENHA_TEMP', False, False, True)]
+    [TDBColumnAttribute('SENHA_TEMP'), TDBAcceptNull]
     property Senha_Temp: String read FSenha_Temp write FSenha_Temp;
-//    [TDBColumnAttribute('USER_ADMIN', False, False, True)]
+    [TDBColumnAttribute('USER_ADMIN'), TDBAcceptNull]
     property User_Admin: String read FUser_Admin write FUser_Admin;
 
     function Insert: Boolean;
@@ -76,6 +76,19 @@ begin
   ResetPropertiesToDefault;
 end;
 
+destructor TUsuario.Destroy;
+begin
+  FDaoRTTI.Free;
+  inherited;
+end;
+
+function TUsuario.Insert: Boolean;
+begin
+  Result := FDaoRTTI.Insert(Self);
+end;
+
+
+
 function TUsuario.DeleteByPk: Boolean;
 begin
   Result := FDaoRTTI.DeleteByPk(Self);
@@ -91,11 +104,7 @@ begin
   Result := FDaoRTTI.DeleteBySQLText(Self, pWhere);
 end;
 
-destructor TUsuario.Destroy;
-begin
-  FDaoRTTI.Free;
-  inherited;
-end;
+
 
 function TUsuario.Existe(const pId: Integer; const pCarrega: Boolean): Boolean;
 var
@@ -138,10 +147,7 @@ begin
 
 end;
 
-function TUsuario.Insert: Boolean;
-begin
-  Result := FDaoRTTI.Insert(Self);
-end;
+
 
 function TUsuario.LoadObjectByPK: Boolean;
 begin
