@@ -125,7 +125,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' possui o atributo TDBTable vazio ou inexistente!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -158,7 +157,6 @@ begin
       begin
         raise Exception.Create
           ('Nenhuma propriedade válida fornecida para construir a cláusula WHERE!');
-        exit;
       end;
 
       // Monta a consulta UPDATE
@@ -230,7 +228,6 @@ begin
       begin
         raise Exception.Create('Classe ' + lType.Name +
           ' está com o atributo TDBTable em branco ou inexistente!');
-        exit;
       end;
 
       // Encontra a propriedade com o atributo Chave Primária (PrimaryKey)
@@ -241,7 +238,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' não possui uma propriedade marcada como Chave Primária!');
-        exit;
       end;
 
       // Pega a ID associada a propriedade PK
@@ -250,7 +246,6 @@ begin
       if (lPkValue <= 0) then
       begin
         raise Exception.Create('Id da PK não pode ser menor ou igual a zero!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -313,7 +308,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' possui o atributo TDBTable vazio ou inexistente!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -336,7 +330,6 @@ begin
       begin
         raise Exception.Create
           ('Nenhuma propriedade válida fornecida para construir a cláusula WHERE!');
-        exit;
       end;
 
       // Monta o SQL para o delete
@@ -401,7 +394,6 @@ begin
       begin
         raise Exception.Create
           ('É necessário informar uma condição para executar um Delete!');
-        exit;
       end;
 
       lType := lContext.GetType(pObject.ClassType);
@@ -411,7 +403,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' possui o atributo TDBTable vazio ou inexistente!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -576,7 +567,6 @@ begin
       begin
         raise Exception.Create('Classe ' + lType.Name +
           ' está com o atributo TDBTable em branco ou inexistente!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -663,7 +653,6 @@ begin
       begin
         raise Exception.Create
           ('É necessário informar uma condição para executar um Update!');
-        exit;
       end;
 
       lType := lContext.GetType(pObject.ClassType);
@@ -673,7 +662,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' possui o atributo TDBTable vazio ou inexistente!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -759,7 +747,6 @@ begin
       begin
         raise Exception.Create('Classe ' + lType.Name +
           ' está com o atributo TDBTable em branco ou inexistente!');
-        exit;
       end;
 
       // Encontra a propriedade com o atributo Chave Primária (PrimaryKey)
@@ -769,7 +756,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' não possui uma propriedade marcada como Chave Primária!');
-        exit;
       end;
 
       // Pega a ID associada a propriedade PK
@@ -778,7 +764,6 @@ begin
       if (lPkValue <= 0) then
       begin
         raise Exception.Create('Id da PK não pode ser menor ou igual a zero!');
-        exit;
       end;
 
       lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -818,14 +803,10 @@ begin
         end;
       end;
 
-      ShowMessage('Parametro ' + lQuery.Params[1].Name + ' = ' +
-        VarToStr(lQuery.Params[1].Value));
-
       // Parametro da PK
       lQuery.Params.ParamByName(lPk.Name).Value := lPkValue;
 
       lQuery.Prepare;
-      // ShowMessage('Parametro ' + lQuery.Params[1].Name + ' = ' + VarToStr(lQuery.Params[1].Value));
       lQuery.ExecSQL;
       Result := True;
 
@@ -870,7 +851,6 @@ begin
       begin
         raise Exception.Create('Classe ' + lType.Name +
           ' está com o atributo TDBTable em branco ou inexistente!');
-        exit;
       end;
 
       lQuery.Connection := FConnection;
@@ -882,7 +862,6 @@ begin
       begin
         raise Exception.Create('A classe ' + lType.Name +
           ' não possui uma propriedade marcada como Chave Primária!');
-        exit;
       end;
 
       // Monta a consulta SQL
@@ -901,7 +880,6 @@ begin
 
       if not(lQuery.IsEmpty) then
       begin
-        Result := True;
 
         // Atribui os valores das colunas às propriedades do objeto
         for lProperty in lType.GetProperties do
@@ -924,6 +902,8 @@ begin
             end;
           end;
         end;
+
+        Result := True;
       end;
 
     except
