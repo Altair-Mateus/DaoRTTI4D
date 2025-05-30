@@ -7,6 +7,16 @@ uses
   RTTI,
   Data.DB,
   FireDAC.Comp.Client,
+  FireDAC.Comp.DataSet,
+  FireDAC.Phys,
+  FireDAC.Phys.Intf,
+  FireDAC.DApt,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Param,
+  FireDAC.Stan.Error,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Async,
   System.Variants,
   uDBAttributes,
   System.Classes;
@@ -66,9 +76,6 @@ type
     constructor Create;
     destructor Destroy; override;
 
-    // Define a conexão com o banco de dados. Deve ser definido no DM a conexão para esta property
-    class property Connection: TFDConnection read FConnection write FConnection;
-
   end;
 
 implementation
@@ -80,7 +87,7 @@ implementation
 }
 
 uses
-  Vcl.Dialogs;
+  uDbConfig;
 
 function TDaoRTTI.CheckTableAttribute(pType: TRttiType): Boolean;
 begin
@@ -93,6 +100,7 @@ end;
 
 constructor TDaoRTTI.Create;
 begin
+  FConnection := TDbConfig.Connection;
   FPropertiesToWhere := TStringList.Create;
 end;
 

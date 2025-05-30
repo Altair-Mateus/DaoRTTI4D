@@ -9,11 +9,7 @@ type
   // Atributo para a coluna da tabela
   TDBColumnAttribute = class(TCustomAttribute)
   private
-    FIsPrimaryKey: Boolean;
-    FIsAutoIncrement: Boolean;
     FFieldName: string;
-    FAcceptNull: Boolean;
-
   public
     constructor Create(const AFieldName: string);
 
