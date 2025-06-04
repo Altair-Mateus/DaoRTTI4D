@@ -17,9 +17,12 @@ uses
   FireDAC.Stan.Error,
   FireDAC.Stan.Def,
   FireDAC.Stan.Async,
+  FireDAC.VCLUI.Wait,
   System.Variants,
   uDBAttributes,
-  System.Classes;
+  System.Classes,
+  System.TypInfo,
+  System.UITypes;
 
 type
   TDaoRTTI = class
@@ -143,7 +146,7 @@ begin
         if CheckColumnsAttribute(lProperty) then
         begin
           lSets.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName +
-            ' = :' + lProperty.Name);
+            '=:' + lProperty.Name);
         end;
       end;
 
@@ -153,15 +156,15 @@ begin
         if CheckColumnsAttribute(lProperty) and
           (FPropertiesToWhere.IndexOf(lProperty.Name) > -1) then
         begin
-          if not lWhereClause.IsEmpty then
+          if not(lWhereClause.Trim.IsEmpty) then
             lWhereClause := lWhereClause + ' AND ';
           lWhereClause := lWhereClause +
-            lProperty.GetAttribute<TDBColumnAttribute>.FieldName + ' = :' +
+            lProperty.GetAttribute<TDBColumnAttribute>.FieldName + '=:' +
             lProperty.Name;
         end;
       end;
 
-      if lWhereClause.IsEmpty then
+      if (lWhereClause.Trim.IsEmpty) then
       begin
         raise Exception.Create
           ('Nenhuma propriedade válida fornecida para construir a cláusula WHERE!');
@@ -326,15 +329,15 @@ begin
         if (CheckColumnsAttribute(lProperty)) and
           (FPropertiesToWhere.IndexOf(lProperty.Name) > -1) then
         begin
-          if not lWhereClause.IsEmpty then
+          if not(lWhereClause.Trim.IsEmpty) then
             lWhereClause := lWhereClause + ' AND ';
           lWhereClause := lWhereClause +
-            lProperty.GetAttribute<TDBColumnAttribute>.FieldName + ' = :' +
+            lProperty.GetAttribute<TDBColumnAttribute>.FieldName + '=:' +
             lProperty.Name;
         end;
       end;
 
-      if lWhereClause.IsEmpty then
+      if (lWhereClause.Trim.IsEmpty) then
       begin
         raise Exception.Create
           ('Nenhuma propriedade válida fornecida para construir a cláusula WHERE!');
@@ -354,7 +357,7 @@ begin
         if (CheckColumnsAttribute(lProperty)) and
           (FPropertiesToWhere.IndexOf(lProperty.Name) > -1) then
         begin
-          if not lWhereClause.IsEmpty then
+          if not(lWhereClause.Trim.IsEmpty) then
             lQuery.Params.ParamByName(lProperty.Name).Value :=
               GetParameterValue(pObject, lProperty);
         end;
@@ -384,7 +387,6 @@ function TDaoRTTI.DeleteBySQLText(const pObject: TObject;
 var
   lContext: TRttiContext;
   lType: TRttiType;
-  lProperty: TRttiProperty;
   lSQL, lTable: string;
   lQuery: TFDQuery;
 
@@ -736,7 +738,7 @@ var
   lQuery: TFDQuery;
   lparamValue: Variant;
   lPkValue: Variant;
-  lCampos, lParams: TStringList;
+  lCampos: TStringList;
 begin
 
   Result := False;
