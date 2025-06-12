@@ -22,11 +22,13 @@ uses
   uDBAttributes,
   System.Classes,
   System.TypInfo,
-  System.UITypes;
+  System.UITypes,
+  System.Generics.Collections;
 
 type
   TDaoRTTI = class
   private
+    FContext: TRttiContext;
     FPropertiesToWhere: TStringList;
     FConnection: TFDConnection;
 
@@ -44,6 +46,19 @@ type
 
     // Localiza a property com o atributo de Primary Key no banco de dados
     function FindPrimaryKeyProperty(const pType: TRttiType): TRttiProperty;
+
+    function GetRttiType(const pObject: TObject): TRttiType;
+    function ExtractColumnProps(const pType: TRttiType): TArray<TRttiProperty>;
+    function BuildInsertSQL(const pTable: String;
+      const pColumns: TArray<TRttiProperty>): String;
+    function BuildUpdateSQL(const pTable: String;
+      const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
+    function BuildDeleteSQL(const pTable: String;
+      const pWhereCols: TArray<TRttiProperty>): String;
+    function GetParamValue(const pObject: TObject;
+      const pProperty: TRttiProperty): Variant;
+    function ExecuteSQL(const pSql: String;
+      const pParamDict: TDictionary<String, Variant>): Boolean;
 
   public
 
@@ -90,7 +105,8 @@ implementation
 }
 
 uses
-  uDbConfig;
+  uDbConfig,
+  uDaoRTTIExceptions;
 
 function TDaoRTTI.CheckTableAttribute(pType: TRttiType): Boolean;
 begin
@@ -145,8 +161,8 @@ begin
       begin
         if CheckColumnsAttribute(lProperty) then
         begin
-          lSets.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName +
-            '=:' + lProperty.Name);
+          lSets.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName + '=:'
+            + lProperty.Name);
         end;
       end;
 
@@ -448,6 +464,67 @@ begin
   inherited;
 end;
 
+function TDaoRTTI.ExecuteSQL(const pSql: String;
+  const pParamDict: TDictionary<String, Variant>): Boolean;
+var
+  lQuery: TFDQuery;
+  lPair: TPair<String, Variant>;
+begin
+  Result := False;
+
+  lQuery := TFDQuery.Create(nil);
+  try
+    try
+
+      lQuery.Connection := FConnection;
+      lQuery.SQL.Text := pSql;
+
+      for lPair in pParamDict do
+      begin
+        if (VarIsNull(lPair.Value)) then
+          lQuery.Params.ParamByName(lPair.Key).Clear
+        else
+          lQuery.Params.ParamByName(lPair.Key).Value := lPair.Value;
+      end;
+
+      lQuery.Prepare;
+      lQuery.ExecSQL;
+
+      Result := True;
+    except
+      on E: Exception do
+      begin
+        raise EExecutarSQL.Create(E.Message);
+      end;
+    end;
+  finally
+    lQuery.Free;
+  end;
+
+end;
+
+function TDaoRTTI.ExtractColumnProps(const pType: TRttiType)
+  : TArray<TRttiProperty>;
+var
+  lProperty: TRttiProperty;
+  lList: TList<TRttiProperty>;
+begin
+  lList := TList<TRttiProperty>.Create;
+  try
+
+    for lProperty in pType.GetProperties do
+    begin
+      if (lProperty.HasAttribute<TDBIsAutoIncrement>) then
+        Continue;
+      lList.Add(lProperty);
+    end;
+
+    Result := lList.ToArray;
+  finally
+    lList.Free;
+  end;
+end;
+
 function TDaoRTTI.FindPrimaryKeyProperty(const pType: TRttiType): TRttiProperty;
 var
   lProperty: TRttiProperty;
@@ -461,7 +538,7 @@ begin
     if lProperty.HasAttribute(TDBIsPrimaryKey) then
     begin
       Result := lProperty;
-      exit;
+      Exit;
     end;
   end;
 
@@ -487,20 +564,20 @@ begin
       tkString, tkLString, tkUString, tkWString:
         begin
           if (lValue.AsString = '') then
-            exit(Null);
+            Exit(Null);
         end;
 
       tkInteger, tkInt64:
         begin
           if (lValue.AsInteger = 0) then
-            exit(Null);
+            Exit(Null);
         end;
 
       tkFloat:
         begin
           if (lValue.AsExtended = 0) or
             (lValue.AsExtended = EncodeDate(1899, 12, 30)) then
-            exit(Null);
+            Exit(Null);
         end;
 
     end;
@@ -516,6 +593,50 @@ begin
 
 end;
 
+function TDaoRTTI.GetParamValue(const pObject: TObject;
+  const pProperty: TRttiProperty): Variant;
+var
+  lAttrColumn: TDBColumnAttribute;
+  lValue: TValue;
+begin
+
+  lAttrColumn := pProperty.GetAttribute<TDBColumnAttribute>;
+  lValue := pProperty.GetValue(pObject);
+
+  // Retorna null para gravar no banco
+  if (pProperty.HasAttribute<TDBAcceptNull>) then
+  begin
+
+    case lValue.Kind of
+
+      tkString, tkLString, tkUString, tkWString:
+        begin
+          if (lValue.AsString.Trim.IsEmpty) then
+            Exit(Null);
+        end;
+
+      tkInteger, tkInt64:
+        begin
+          if (lValue.AsInteger = 0) then
+            Exit(Null);
+        end;
+
+      tkFloat:
+        begin
+          if ((lValue.AsExtended = 0) or (Trunc(lValue.AsExtended) = Trunc(EncodeDate(1899, 12, 30)))) then
+            Exit(Null);
+        end;
+
+    end;
+
+  end;
+
+  if (pProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
+    Exit(lValue.AsExtended);
+
+  Result := lValue.AsVariant;
+end;
+
 procedure TDaoRTTI.AddPropertyToWhere(const pPropertyName: string);
 begin
   FPropertiesToWhere.Add(pPropertyName);
@@ -524,6 +645,104 @@ end;
 function TDaoRTTI.GetPropertiesToWhere: TStringList;
 begin
   Result := FPropertiesToWhere;
+end;
+
+function TDaoRTTI.BuildDeleteSQL(const pTable: String;
+  const pWhereCols: TArray<TRttiProperty>): String;
+var
+  lWhereList: TStringList;
+  lProperty: TRttiProperty;
+  lAttrColumn: TDBColumnAttribute;
+begin
+  Result := '';
+
+  lWhereList := TStringList.Create;
+  try
+
+    for lProperty in pWhereCols do
+    begin
+      lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
+      lWhereList.Add(Format('%s = %s', [lAttrColumn.FieldName, lProperty.Name]));
+    end;
+
+    Result := Format('DELETE FROM %s WHERE %s', [pTable, lWhereList.CommaText]);
+
+  finally
+    lWhereList.Free;
+  end;
+end;
+
+function TDaoRTTI.BuildInsertSQL(const pTable: String;
+  const pColumns: TArray<TRttiProperty>): String;
+var
+  lColumnsList, lParamsList: TStringList;
+  lProperty: TRttiProperty;
+  lAttrColumn: TDBColumnAttribute;
+begin
+  Result := '';
+
+  lColumnsList := TStringList.Create;
+  lParamsList := TStringList.Create;
+  try
+
+    for lProperty in pColumns do
+    begin
+      lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
+      lColumnsList.Add(lAttrColumn.FieldName);
+      lParamsList.Add(':' + lProperty.Name);
+    end;
+
+    Result := Format('INSERT INTO %s (%s) VALUES (%s)',
+      [pTable, lColumnsList.CommaText, lParamsList.CommaText]);
+
+  finally
+    lColumnsList.Free;
+    lParamsList.Free;
+  end;
+
+end;
+
+function TDaoRTTI.BuildUpdateSQL(const pTable: String;
+  const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
+var
+  lSetList, lWhereList: TStringList;
+  lProperty: TRttiProperty;
+  lAttrColumn: TDBColumnAttribute;
+begin
+  Result := '';
+
+  lSetList := TStringList.Create;
+  lWhereList := TStringList.Create;
+  try
+
+    for lProperty in pSetCols do
+    begin
+      lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
+      lSetList.Add(Format('%s = %s', [lAttrColumn.FieldName, lProperty.Name]));
+    end;
+
+    for lProperty in pWhereCols do
+    begin
+      lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
+      lWhereList.Add(Format('%s = %s', [lAttrColumn.FieldName,
+        lProperty.Name]));
+    end;
+
+    Result := Format('UPDATE %s SET %s WHERE %s', [pTable, lSetList.CommaText,
+      lWhereList.CommaText]);
+
+  finally
+    lSetList.Free;
+    lWhereList.Free;
+  end;
+
+end;
+
+function TDaoRTTI.GetRttiType(const pObject: TObject): TRttiType;
+begin
+  Result := FContext.GetType(pObject.ClassType);
+  if not(Result.HasAttribute<TDBTable>) then
+    raise ESemAtributoTabela.Create(Result.Name);
 end;
 
 function TDaoRTTI.CheckAcepptNullAttribute(const pProperty

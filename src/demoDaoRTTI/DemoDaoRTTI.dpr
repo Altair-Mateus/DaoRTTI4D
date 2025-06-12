@@ -10,7 +10,8 @@ uses
   uUsuario in 'src\model\uUsuario.pas',
   System.SysUtils,
   Vcl.Dialogs,
-  Winapi.Windows {frmTesteDaoRTTI};
+  Winapi.Windows {frmTesteDaoRTTI},
+  uDaoRTTIExceptions in 'src\exceptions\uDaoRTTIExceptions.pas';
 
 {$R *.res}
 
