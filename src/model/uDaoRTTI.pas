@@ -28,7 +28,7 @@ type
   TDaoRTTI = class
   private
     FPropertiesToWhere: TStringList;
-    class var FConnection: TFDConnection;
+    FConnection: TFDConnection;
 
     // Verifica se a classe possui o atributo com o nome da tabela
     function CheckTableAttribute(pType: TRttiType): Boolean;

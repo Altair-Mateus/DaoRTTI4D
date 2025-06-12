@@ -90,12 +90,19 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Id := 1;
 
-    lUsuario.Id := 1;
-
-    if lUsuario.DeleteByPk then
-      ShowMessage('Registro EXCLUIDO')
-
+      if lUsuario.DeleteByPk then
+        ShowMessage('Registro EXCLUIDO')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao deletar registro pela Primary Key!', MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -108,16 +115,24 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Login := '10';
+      lUsuario.Senha := 'teste';
 
-    lUsuario.Login := '10';
-    lUsuario.Senha := 'teste';
+      lUsuario.AddPropertyToWhere('Login');
+      lUsuario.AddPropertyToWhere('Senha');
 
-    lUsuario.AddPropertyToWhere('Login');
-    lUsuario.AddPropertyToWhere('Senha');
-
-    if lUsuario.DeleteByProp then
-      ShowMessage('Registro EXCLUIDO')
-
+      if lUsuario.DeleteByProp then
+        ShowMessage('Registro EXCLUIDO')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao deletar registro pelas Propertys Informadas!',
+          MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -130,12 +145,19 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Id := 3;
 
-    lUsuario.Id := 3;
-
-    if lUsuario.DeleteBySQLText('ID = ' + IntToStr(lUsuario.Id)) then
-      ShowMessage('Registro EXCLUIDO')
-
+      if lUsuario.DeleteBySQLText('ID = ' + IntToStr(lUsuario.Id)) then
+        ShowMessage('Registro EXCLUIDO')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao deletar registro pelo SQL!', MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -153,17 +175,25 @@ var
 begin
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Nome := 'Altair Mateus';
+      lUsuario.Login := 'altair123';
+      lUsuario.Senha := '12345';
+      lUsuario.Status := 'A';
+      lUsuario.Data_Cadastro := Now;
+      lUsuario.User_Admin := 'N';
 
-    lUsuario.Nome := 'Altair Mateus';
-    lUsuario.Login := 'altair123';
-    lUsuario.Senha := '12345';
-    lUsuario.Status := 'A';
-    lUsuario.Data_Cadastro := Now;
-    lUsuario.User_Admin := 'N';
+      if (lUsuario.Insert) then
+        ShowMessage('Registro gravado')
 
-    if (lUsuario.Insert) then
-      ShowMessage('Registro gravado')
-
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao inserir registro!', MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -171,7 +201,8 @@ end;
 
 procedure TfrmTelaPrincipal.btnLinkedinClick(Sender: TObject);
 begin
-ShellExecute(0, 'open', 'https://www.linkedin.com/in/altair-mateus-t-alencastro/', nil, nil,
+  ShellExecute(0, 'open',
+    'https://www.linkedin.com/in/altair-mateus-t-alencastro/', nil, nil,
     SW_SHOWNORMAL);
 end;
 
@@ -181,12 +212,19 @@ var
 begin
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Id := 1;
 
-    lUsuario.Id := 1;
-
-    if lUsuario.LoadObjectByPK then
-      ShowMessage(lUsuario.Nome + ' ' + lUsuario.Login)
-
+      if lUsuario.LoadObjectByPK then
+        ShowMessage(lUsuario.Nome + ' ' + lUsuario.Login)
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao buscar registro pela Primary Key!', MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -199,19 +237,26 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Id := 1;
+      lUsuario.Nome := 'teste UpdateByPK';
+      lUsuario.Login := '10';
+      lUsuario.Senha := '12345';
+      lUsuario.Status := 'A';
+      lUsuario.Data_Cadastro := Now;
+      lUsuario.Senha_Temp := 'N';
+      lUsuario.User_Admin := 'N';
 
-    lUsuario.Id := 1;
-    lUsuario.Nome := 'teste UpdateByPK';
-    lUsuario.Login := '10';
-    lUsuario.Senha := '12345';
-    lUsuario.Status := 'A';
-    lUsuario.Data_Cadastro := Now;
-    lUsuario.Senha_Temp := 'N';
-    lUsuario.User_Admin := 'N';
-
-    if lUsuario.UpdateByPK then
-      ShowMessage('Registro Editado')
-
+      if lUsuario.UpdateByPK then
+        ShowMessage('Registro Editado')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao atualizar registro pela Primary Key!', MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -224,20 +269,28 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Nome := 'teste UpdateByProp';
+      lUsuario.Login := 'altair123';
+      lUsuario.Senha := '12345';
+      lUsuario.Status := 'A';
+      lUsuario.Data_Cadastro := Now;
+      lUsuario.Senha_Temp := 'N';
+      lUsuario.User_Admin := 'N';
 
-    lUsuario.Nome := 'teste UpdateByProp';
-    lUsuario.Login := 'altair123';
-    lUsuario.Senha := '12345';
-    lUsuario.Status := 'A';
-    lUsuario.Data_Cadastro := Now;
-    lUsuario.Senha_Temp := 'N';
-    lUsuario.User_Admin := 'N';
+      lUsuario.AddPropertyToWhere('login');
 
-    lUsuario.AddPropertyToWhere('login');
-
-    if lUsuario.UpdateByProp then
-      ShowMessage('Registro Editado')
-
+      if lUsuario.UpdateByProp then
+        ShowMessage('Registro Editado')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao atualizar registro pelas Propertys Informadas!',
+          MB_OK + MB_ICONERROR);
+      end;
+    end;
   finally
     lUsuario.Free;
   end;
@@ -250,19 +303,27 @@ begin
 
   lUsuario := TUsuario.Create;
   try
+    try
+      lUsuario.Id := 17;
+      lUsuario.Nome := 'teste UpdateByText';
+      lUsuario.Login := '10';
+      lUsuario.Senha := '12345';
+      lUsuario.Status := 'A';
+      lUsuario.Data_Cadastro := Now;
+      lUsuario.Senha_Temp := 'N';
+      lUsuario.User_Admin := 'N';
 
-    lUsuario.Id := 17;
-    lUsuario.Nome := 'teste UpdateByText';
-    lUsuario.Login := '10';
-    lUsuario.Senha := '12345';
-    lUsuario.Status := 'A';
-    lUsuario.Data_Cadastro := Now;
-    lUsuario.Senha_Temp := 'N';
-    lUsuario.User_Admin := 'N';
+      if lUsuario.UpdateBySQLText(' LOGIN = ' + QuotedStr(lUsuario.Login)) then
+        ShowMessage('Registro EDITADO')
+    except
+      on E: Exception do
+      begin
+        // Tratar a exceção no UI - (User Interface)
+        Application.MessageBox(PWideChar(E.Message),
+          'Erro ao atualizar registro por SQL!', MB_OK + MB_ICONERROR);
+      end;
 
-    if lUsuario.UpdateBySQLText(' LOGIN = ' + QuotedStr(lUsuario.Login)) then
-      ShowMessage('Registro EDITADO')
-
+    end;
   finally
     lUsuario.Free;
   end;

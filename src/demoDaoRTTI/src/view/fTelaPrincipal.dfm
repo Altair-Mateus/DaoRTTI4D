@@ -29,8 +29,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
     ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 624
-    ExplicitHeight = 441
     object pnlTitulo: TPanel
       Left = 0
       Top = 0
@@ -48,7 +46,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitWidth = 624
     end
     object pnlCentral: TPanel
       Left = 0
@@ -60,10 +57,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
       Color = 1973790
       ParentBackground = False
       TabOrder = 1
-      ExplicitLeft = 224
-      ExplicitTop = 312
-      ExplicitWidth = 185
-      ExplicitHeight = 41
       object pnlFundoInserir: TPanel
         AlignWithMargins = True
         Left = 20
@@ -79,7 +72,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         Color = clWhite
         ParentBackground = False
         TabOrder = 0
-        ExplicitWidth = 584
         object pnlInserir: TPanel
           AlignWithMargins = True
           Left = 1
@@ -95,9 +87,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 582
           object pnlImgInserir: TPanel
             Left = 0
             Top = 0
@@ -171,10 +160,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
             Color = 2763306
             ParentBackground = False
             TabOrder = 1
-            ExplicitLeft = 200
-            ExplicitTop = 16
-            ExplicitWidth = 185
-            ExplicitHeight = 41
             object lblInserir: TLabel
               Left = 16
               Top = 8
@@ -211,8 +196,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         Color = clWhite
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 20
-        ExplicitWidth = 584
         object pnlBuscar: TPanel
           AlignWithMargins = True
           Left = 1
@@ -228,7 +211,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitWidth = 582
           object pnlImgBuscar: TPanel
             Left = 0
             Top = 0
@@ -307,7 +289,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
             Color = 2763306
             ParentBackground = False
             TabOrder = 1
-            ExplicitWidth = 532
             object lblBuscar: TLabel
               Left = 16
               Top = 8
@@ -344,8 +325,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         Color = clWhite
         ParentBackground = False
         TabOrder = 2
-        ExplicitTop = 20
-        ExplicitWidth = 584
         object pnlDeletar: TPanel
           AlignWithMargins = True
           Left = 1
@@ -361,7 +340,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitWidth = 582
           object pnlImgDeletar: TPanel
             Left = 0
             Top = 0
@@ -437,7 +415,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
             Color = 2763306
             ParentBackground = False
             TabOrder = 1
-            ExplicitWidth = 532
             object lblDeletar: TLabel
               Left = 16
               Top = 8
@@ -492,8 +469,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         Color = clWhite
         ParentBackground = False
         TabOrder = 3
-        ExplicitTop = 20
-        ExplicitWidth = 584
         object pnlAlterar: TPanel
           AlignWithMargins = True
           Left = 1
@@ -509,7 +484,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitWidth = 582
           object pnlImgAlterar: TPanel
             Left = 0
             Top = 0
@@ -580,9 +554,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
             Color = 2763306
             ParentBackground = False
             TabOrder = 1
-            ExplicitLeft = 56
-            ExplicitTop = -2
-            ExplicitWidth = 532
             object lblAlterar: TLabel
               Left = 16
               Top = 8
@@ -639,7 +610,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
       ParentBackground = False
       ParentFont = False
       TabOrder = 2
-      ExplicitTop = 486
       object lblDev: TLabel
         AlignWithMargins = True
         Left = 5
@@ -676,9 +646,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         ParentFont = False
         TabOrder = 0
         OnClick = btnGithubClick
-        ExplicitLeft = 312
-        ExplicitTop = 14
-        ExplicitHeight = 25
       end
       object btnLinkedin: TButton
         AlignWithMargins = True
@@ -696,9 +663,6 @@ object frmTelaPrincipal: TfrmTelaPrincipal
         ParentFont = False
         TabOrder = 1
         OnClick = btnLinkedinClick
-        ExplicitLeft = 312
-        ExplicitTop = 14
-        ExplicitHeight = 25
       end
     end
   end
