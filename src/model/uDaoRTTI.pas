@@ -121,6 +121,7 @@ constructor TDaoRTTI.Create;
 begin
   FConnection := TDbConfig.Connection;
   FPropertiesToWhere := TStringList.Create;
+  FContext := TRttiContext.Create;
 end;
 
 function TDaoRTTI.UpdateByProp(const pObject: TObject): Boolean;
@@ -461,6 +462,7 @@ end;
 destructor TDaoRTTI.Destroy;
 begin
   FPropertiesToWhere.Free;
+  FContext.Free;
   inherited;
 end;
 
@@ -631,10 +633,13 @@ begin
 
   end;
 
-  if (pProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
-    Exit(lValue.AsExtended);
-
-  Result := lValue.AsVariant;
+  // Converte o TValue para tipos específicos para persistir no banco de dados
+  if (lValue.TypeInfo = TypeInfo(TDate)) then
+    Result := FormatDateTime('yyyy/mm/dd', lValue.AsExtended)
+  else if (lValue.TypeInfo = TypeInfo(TDateTime)) then
+    Result := FormatDateTime('yyyy/mm/dd hh:MM:ss', lValue.AsExtended)
+  else
+    Result := lValue.AsVariant;
 end;
 
 procedure TDaoRTTI.AddPropertyToWhere(const pPropertyName: string);
@@ -771,87 +776,35 @@ end;
 
 function TDaoRTTI.Insert(const pObject: TObject): Boolean;
 var
-  lContext: TRttiContext;
-  lType: TRttiType;
+  lContextType: TRttiType;
   lProperty: TRttiProperty;
   lSQL, lTable: string;
-  lQuery: TFDQuery;
-  lparamValue: Variant;
-  lColumns, lValues: TStringList;
+  lColumns: TArray<TRttiProperty>;
+  lParamDict: TDictionary<String, Variant>;
 begin
   Result := False;
 
-  lSQL := '';
-  lTable := '';
-  lContext := TRttiContext.Create;
-  lQuery := TFDQuery.Create(nil);
-  lColumns := TStringList.Create;
-  lValues := TStringList.Create;
+  lContextType := GetRttiType(pObject);
+  lTable := lContextType.GetAttribute<TDBTable>.TableName;
+  lColumns := ExtractColumnProps(lContextType);
+
+  if (Length(lColumns) = 0) then
+    raise EClasseNaoMapeada.Create(lContextType.Name);
+
+  lSQL := BuildInsertSQL(lTable, lColumns);
+
+  lParamDict := TDictionary<String, Variant>.Create;
   try
-    try
-      lType := lContext.GetType(pObject.ClassType);
 
-      // Verifica se a classe possui o atributo com o nome da tabela
-      if not CheckTableAttribute(lType) then
-      begin
-        raise Exception.Create('Classe ' + lType.Name +
-          ' está com o atributo TDBTable em branco ou inexistente!');
-      end;
-
-      lTable := lType.GetAttribute<TDBTable>.TableName;
-
-      // Percorre as propriedades para montar as colunas para o SQL
-      for lProperty in lType.GetProperties do
-      begin
-        // Verifica se a propriedade possui o atributo com o nome da coluna e se a mesma não é PK
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lColumns.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName);
-          lValues.Add(':' + lProperty.Name);
-        end;
-
-      end;
-
-      // Monta a query
-      lSQL := 'INSERT INTO ' + lTable + ' (' + lColumns.CommaText + ') VALUES ('
-        + lValues.CommaText + ')';
-
-      lQuery.Connection := FConnection;
-      lQuery.Close;
-      lQuery.SQL.Clear;
-      lQuery.SQL.Add(lSQL);
-
-      // Definindo parâmetros
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lparamValue := GetParameterValue(pObject, lProperty);
-          // Define o valor do parâmetro, ou NULL se for o caso
-          if VarIsNull(lparamValue) then
-            lQuery.Params.ParamByName(lProperty.Name).Clear
-            // Define como NULL
-          else
-            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
-        end;
-      end;
-
-      lQuery.Prepare;
-      lQuery.ExecSQL;
-
-      Result := True;
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create('Erro ao inserir registro na tabela ' + lTable +
-          ': ' + E.Message);
-      end;
+    for lProperty in lColumns do
+    begin
+      lParamDict.Add(lProperty.Name, GetParamValue(pObject, lProperty));
     end;
+
+    Result := ExecuteSQL(lSQL, lParamDict);
+
   finally
-    lQuery.Free;
-    lContext.Free;
-    lColumns.Free;
-    lValues.Free;
+    lParamDict.Free;
   end;
 end;
 

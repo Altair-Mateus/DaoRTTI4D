@@ -16,6 +16,11 @@ type
     constructor Create(const pErro: String);
   end;
 
+  EClasseNaoMapeada = class(Exception)
+  public
+    constructor Create(const pNomeClasse: String);
+  end;
+
 implementation
 
 { ESemAtributoTabela }
@@ -31,6 +36,13 @@ end;
 constructor EExecutarSQL.Create(const pErro: String);
 begin
   inherited Create('Erro ao executar SQL: ' + pErro);
+end;
+
+{ EClasseNaoMapeada }
+
+constructor EClasseNaoMapeada.Create(const pNomeClasse: String);
+begin
+  inherited CreateFmt('Classe %s não possui propiedades mapeadas ou somente propriedade com AutoInc', [pNomeClasse]);
 end;
 
 end.
