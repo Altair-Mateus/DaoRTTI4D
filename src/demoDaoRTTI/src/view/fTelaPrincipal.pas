@@ -93,7 +93,7 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 1;
+      lUsuario.Id := 5;
 
       if lUsuario.DeleteByPk then
         ShowMessage('Registro EXCLUIDO')
@@ -121,8 +121,8 @@ begin
       lUsuario.Login := '10';
       lUsuario.Senha := 'teste';
 
-      lUsuario.AddPropertyToWhere('Login');
-      lUsuario.AddPropertyToWhere('Senha');
+      lUsuario.AddPropertyToWhere('login');
+      lUsuario.AddPropertyToWhere('senha');
 
       if lUsuario.DeleteByProp then
         ShowMessage('Registro EXCLUIDO')
