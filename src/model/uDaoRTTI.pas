@@ -38,22 +38,21 @@ type
     function CheckColumnsAttribute(pProperty: TRttiProperty): Boolean;
     // Verifica se a property tem o atributo de auto incremento
     function CheckAutoIncAttribute(const pProperty: TRttiProperty): Boolean;
-    // Verifica se a property tem o atributo que aceita valores nulos
-    function CheckAcepptNullAttribute(const pProperty: TRttiProperty): Boolean;
-    // Realiza a conversão do tipo Variant
-    function GetParameterValue(const pObject: TObject;
-      const pProperty: TRttiProperty): Variant;
 
     // Localiza a property com o atributo de Primary Key no banco de dados
     function FindPrimaryKeyProperty(const pType: TRttiType): TRttiProperty;
 
     function GetRttiType(const pObject: TObject): TRttiType;
-    function ExtractColumnProps(const pType: TRttiType): TArray<TRttiProperty>;
+
+    // Monta e executa os SQLs
     function BuildInsertSQL(const pTable: String; const pColumns: TArray<TRttiProperty>): String;
     function BuildUpdateSQL(const pTable: String; const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
     function BuildDeleteSQL(const pTable: String; const pWhereCols: TArray<TRttiProperty>): String;
-    function GetParamValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
     function ExecuteSQL(const pSql: String; const pParamDict: TDictionary<String, Variant>): Boolean;
+    function ExtractColumnProps(const pType: TRttiType): TArray<TRttiProperty>;
+
+    // Realiza a conversão do tipo Variant
+    function GetParamValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
 
   public
 
@@ -177,7 +176,7 @@ function TDaoRTTI.DeleteByPK(const pObject: TObject): Boolean;
 var
   lType: TRttiType;
   lTable, lSQL: String;
-  lProperty, lPk: TRttiProperty;
+  lPk: TRttiProperty;
   lPkValue: Variant;
   lParamDict: TDictionary<String, Variant>;
 begin
@@ -187,16 +186,7 @@ begin
   lType := GetRttiType(pObject);
   lTable := lType.GetAttribute<TDBTable>.TableName;
 
-  lPk := nil;
-  for lProperty in lType.GetProperties do
-  begin
-    if (lProperty.HasAttribute<TDBIsPrimaryKey>) then
-    begin
-      lPk := lProperty;
-      Break;
-    end;
-  end;
-
+  lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
     raise ESemAtributoChavePrimaria.Create(lTable);
 
@@ -385,63 +375,12 @@ begin
 
 end;
 
-function TDaoRTTI.GetParameterValue(const pObject: TObject;
-  const pProperty: TRttiProperty): Variant;
-var
-  lValue: TValue;
-begin
-
-  lValue := pProperty.GetValue(pObject);
-
-  {
-    Se a propriedade ter o atributo que aceita nulos, e
-    de acordo com seu tipo etiver vazia irá encerrar a
-    função e retornar Null
-  }
-  if (CheckAcepptNullAttribute(pProperty)) then
-  begin
-    case lValue.Kind of
-
-      tkString, tkLString, tkUString, tkWString:
-        begin
-          if (lValue.AsString = '') then
-            Exit(Null);
-        end;
-
-      tkInteger, tkInt64:
-        begin
-          if (lValue.AsInteger = 0) then
-            Exit(Null);
-        end;
-
-      tkFloat:
-        begin
-          if (lValue.AsExtended = 0) or
-            (lValue.AsExtended = EncodeDate(1899, 12, 30)) then
-            Exit(Null);
-        end;
-
-    end;
-  end;
-
-  // Converte o TValue para tipos específicos para persistir no banco de dados
-  if (lValue.TypeInfo = TypeInfo(TDate)) then
-    Result := FormatDateTime('yyyy/mm/dd', lValue.AsExtended)
-  else if (lValue.TypeInfo = TypeInfo(TDateTime)) then
-    Result := FormatDateTime('yyyy/mm/dd hh:MM:ss', lValue.AsExtended)
-  else
-    Result := lValue.AsVariant;
-
-end;
-
 function TDaoRTTI.GetParamValue(const pObject: TObject;
   const pProperty: TRttiProperty): Variant;
 var
-  lAttrColumn: TDBColumnAttribute;
   lValue: TValue;
 begin
 
-  lAttrColumn := pProperty.GetAttribute<TDBColumnAttribute>;
   lValue := pProperty.GetValue(pObject);
 
   // Retorna null para gravar no banco
@@ -590,15 +529,8 @@ end;
 function TDaoRTTI.GetRttiType(const pObject: TObject): TRttiType;
 begin
   Result := FContext.GetType(pObject.ClassType);
-  if not(Result.HasAttribute<TDBTable>) then
+  if not(CheckTableAttribute(Result)) then
     raise ESemAtributoTabela.Create(Result.Name);
-end;
-
-function TDaoRTTI.CheckAcepptNullAttribute(const pProperty
-  : TRttiProperty): Boolean;
-begin
-  // Verifica se a propriedade tem o atributo que aceita valores nulos
-  Result := (pProperty.HasAttribute<TDBAcceptNull>);
 end;
 
 function TDaoRTTI.CheckAutoIncAttribute(const pProperty: TRttiProperty)
@@ -698,7 +630,7 @@ end;
 
 function TDaoRTTI.UpdateByPK(const pObject: TObject): Boolean;
 var
-  lContextType: TRttiType;
+  lType: TRttiType;
   lProperty, lPk: TRttiProperty;
   lSQL, lTable: string;
   lPkValue: Variant;
@@ -707,21 +639,11 @@ var
 begin
 
   Result := False;
-  lPk := nil;
 
-  lContextType := GetRttiType(pObject);
-  lTable := lContextType.GetAttribute<TDBTable>.TableName;
+  lType := GetRttiType(pObject);
+  lTable := lType.GetAttribute<TDBTable>.TableName;
 
-  // Localiza a propriedade marcada como chave primária
-  for lProperty in lContextType.GetProperties do
-  begin
-    if (lProperty.HasAttribute<TDBIsPrimaryKey>) then
-    begin
-      lPk := lProperty;
-      Break;
-    end;
-  end;
-
+  lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
     raise ESemAtributoChavePrimaria.Create(lTable);
 
@@ -729,7 +651,7 @@ begin
   if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
     raise EChavePrimariaNula.Create;
 
-  lColumns := ExtractColumnProps(lContextType);
+  lColumns := ExtractColumnProps(lType);
   lSQL := BuildUpdateSQL(lTable, lColumns, TArray<TRttiProperty>.Create(lPk));
 
   lParamDict := TDictionary<String, Variant>.Create;
@@ -764,17 +686,8 @@ begin
 
   lType := GetRttiType(pObject);
   lTable := lType.GetAttribute<TDBTable>.TableName;
-  lPk := nil;
 
-  for lProperty in lType.GetProperties do
-  begin
-    if (lProperty.HasAttribute<TDBIsPrimaryKey>) then
-    begin
-      lPk := lProperty;
-      Break;
-    end;
-  end;
-
+  lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
     raise ESemAtributoChavePrimaria.Create(lTable);
 
@@ -829,67 +742,54 @@ end;
 
 procedure TDaoRTTI.ResetPropertiesToDefault(const pObject: TObject);
 var
-  lContext: TRttiContext;
   lType: TRttiType;
   lProperty: TRttiProperty;
   lValue: TValue;
 begin
 
-  lContext := TRttiContext.Create;
-  try
-    try
-      lType := lContext.GetType(pObject.ClassType);
+  lType := GetRttiType(pObject);
 
-      for lProperty in lType.GetProperties do
-      begin
-        // Verifica se a propriedade pode ser escrita e se tem o atributo
-        if (lProperty.IsWritable) and (CheckColumnsAttribute(lProperty)) then
-        begin
-          case lProperty.PropertyType.TypeKind of
+  for lProperty in lType.GetProperties do
+  begin
+    // Verifica se a propriedade pode ser escrita e se tem o atributo
+    if (lProperty.IsWritable) and (CheckColumnsAttribute(lProperty)) then
+    begin
+      case lProperty.PropertyType.TypeKind of
 
-            tkInteger, tkInt64:
-              lValue := TValue.From<Integer>(0);
+        tkInteger, tkInt64:
+          lValue := TValue.From<Integer>(0);
 
-            tkFloat:
-              if lProperty.PropertyType.Handle = TypeInfo(TDateTime) then
-                lValue := TValue.From<TDateTime>(0)
-              else if lProperty.PropertyType.Handle = TypeInfo(TDate) then
-                lValue := TValue.From<TDate>(0)
-              else
-                lValue := TValue.From<Double>(0.0);
-
-            tkChar, tkWChar:
-              lValue := TValue.From<WideChar>(#0);
-
-            tkString, tkUString, tkLString, tkWString:
-              lValue := TValue.From<string>('');
-
-            tkEnumeration:
-              if lProperty.PropertyType.Handle = TypeInfo(Boolean) then
-                lValue := TValue.From<Boolean>(False)
-              else
-                lValue := TValue.FromOrdinal(lProperty.PropertyType.Handle, 0);
-
-            tkVariant:
-              lValue := TValue.Empty;
+        tkFloat:
+          if lProperty.PropertyType.Handle = TypeInfo(TDateTime) then
+            lValue := TValue.From<TDateTime>(0)
+          else if lProperty.PropertyType.Handle = TypeInfo(TDate) then
+            lValue := TValue.From<TDate>(0)
           else
-            Continue;
-          end;
+            lValue := TValue.From<Double>(0.0);
 
-          // Seta o valor na property
-          lProperty.SetValue(pObject, lValue);
-        end;
+        tkChar, tkWChar:
+          lValue := TValue.From<WideChar>(#0);
+
+        tkString, tkUString, tkLString, tkWString:
+          lValue := TValue.From<string>('');
+
+        tkEnumeration:
+          if lProperty.PropertyType.Handle = TypeInfo(Boolean) then
+            lValue := TValue.From<Boolean>(False)
+          else
+            lValue := TValue.FromOrdinal(lProperty.PropertyType.Handle, 0);
+
+        tkVariant:
+          lValue := TValue.Empty;
+      else
+        Continue;
       end;
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create
-          ('Erro ao resetar as propriedades para o valor padrão: ' + E.Message);
-      end;
+
+      // Seta o valor na property
+      lProperty.SetValue(pObject, lValue);
     end;
-  finally
-    lContext.Free;
   end;
+
 end;
 
 end.

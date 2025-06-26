@@ -21,7 +21,6 @@ type
     FStatus: String;
     FData_Cadastro: TDateTime;
     FUser_Admin: String;
-    FTable_Name: String;
 
   CONST
     TEMP_PASSWORD = '12345';
