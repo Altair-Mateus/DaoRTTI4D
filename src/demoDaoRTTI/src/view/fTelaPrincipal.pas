@@ -81,7 +81,9 @@ implementation
 
 {$R *.dfm}
 
-uses uUsuario;
+
+uses
+  uUsuario;
 
 procedure TfrmTelaPrincipal.btnDeleteByPKClick(Sender: TObject);
 var
@@ -238,7 +240,7 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 1;
+      lUsuario.Id := 5;
       lUsuario.Nome := 'teste UpdateByPK';
       lUsuario.Login := '10';
       lUsuario.Senha := '12345';
@@ -279,6 +281,7 @@ begin
       lUsuario.User_Admin := 'N';
 
       lUsuario.AddPropertyToWhere('login');
+      lUsuario.AddPropertyToWhere('status');
 
       if lUsuario.UpdateByProp then
         ShowMessage('Registro Editado')
@@ -304,7 +307,6 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 17;
       lUsuario.Nome := 'teste UpdateByText';
       lUsuario.Login := '10';
       lUsuario.Senha := '12345';

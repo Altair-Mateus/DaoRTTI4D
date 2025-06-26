@@ -49,32 +49,25 @@ type
 
     function GetRttiType(const pObject: TObject): TRttiType;
     function ExtractColumnProps(const pType: TRttiType): TArray<TRttiProperty>;
-    function BuildInsertSQL(const pTable: String;
-      const pColumns: TArray<TRttiProperty>): String;
-    function BuildUpdateSQL(const pTable: String;
-      const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
-    function BuildDeleteSQL(const pTable: String;
-      const pWhereCols: TArray<TRttiProperty>): String;
-    function GetParamValue(const pObject: TObject;
-      const pProperty: TRttiProperty): Variant;
-    function ExecuteSQL(const pSql: String;
-      const pParamDict: TDictionary<String, Variant>): Boolean;
+    function BuildInsertSQL(const pTable: String; const pColumns: TArray<TRttiProperty>): String;
+    function BuildUpdateSQL(const pTable: String; const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
+    function BuildDeleteSQL(const pTable: String; const pWhereCols: TArray<TRttiProperty>): String;
+    function GetParamValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
+    function ExecuteSQL(const pSql: String; const pParamDict: TDictionary<String, Variant>): Boolean;
 
   public
 
     function Insert(const pObject: TObject): Boolean;
 
     // Atualiza com base no SQL passado por parametro
-    function UpdateBySQLText(const pObject: TObject;
-      const pWhereClause: string = ''): Boolean;
+    function UpdateBySQLText(const pObject: TObject; const pWhereClause: string = ''): Boolean;
     // Atualiza usando a property mapeada como Primary Key na property
     function UpdateByPK(const pObject: TObject): Boolean;
     // Atualiza usando as propertys passada como parametro
     function UpdateByProp(const pObject: TObject): Boolean;
 
     // Deleta com base no SQL passado por parametro
-    function DeleteBySQLText(const pObject: TObject;
-      const pWhereClause: string = ''): Boolean;
+    function DeleteBySQLText(const pObject: TObject; const pWhereClause: string = ''): Boolean;
     // Deleta usando a property mapeada como Primary Key na property
     function DeleteByPK(const pObject: TObject): Boolean;
     // Atualiza usando as propertys passada como parametro
@@ -126,108 +119,58 @@ end;
 
 function TDaoRTTI.UpdateByProp(const pObject: TObject): Boolean;
 var
-  lContext: TRttiContext;
   lType: TRttiType;
+  lTable, lSQL: String;
+  lColumns, lWhereColumns: TArray<TRttiProperty>;
+  lParamDict: TDictionary<String, Variant>;
   lProperty: TRttiProperty;
-  lSQL, lTable: string;
-  lQuery: TFDQuery;
-  lWhereClause: string;
-  lparamValue: Variant;
-  lSets: TStringList;
+  lProp: String;
 begin
 
   Result := False;
-  lSQL := '';
-  lTable := '';
-  lWhereClause := '';
-  lContext := TRttiContext.Create;
-  lQuery := TFDQuery.Create(nil);
-  lSets := TStringList.Create;
-  try
-    try
-      // Localiza a classe
-      lType := lContext.GetType(pObject.ClassType);
+  lType := GetRttiType(pObject);
+  lTable := lType.GetAttribute<TDBTable>.TableName;
 
-      // Verifica se a classe possui o atributo referente a tabela do BD
-      if not CheckTableAttribute(lType) then
+  if (FPropertiesToWhere.Count = 0) then
+    raise ESemPropriedadeLista.Create;
+
+  lColumns := ExtractColumnProps(lType);
+
+  lWhereColumns := [];
+  for lProp in FPropertiesToWhere do
+  begin
+
+    for lProperty in lType.GetProperties do
+    begin
+      if ((SameText(lProperty.Name, lProp.Trim)) and (lProperty.HasAttribute<TDBColumnAttribute>)) then
       begin
-        raise Exception.Create('A classe ' + lType.Name +
-          ' possui o atributo TDBTable vazio ou inexistente!');
-      end;
-
-      lTable := lType.GetAttribute<TDBTable>.TableName;
-
-      // Percorre as propriedades para montar a cláusula SET do update
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lSets.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName + '=:'
-            + lProperty.Name);
-        end;
-      end;
-
-      // Constrói a cláusula WHERE baseada na lista de propriedades fornecida
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) and
-          (FPropertiesToWhere.IndexOf(lProperty.Name) > -1) then
-        begin
-          if not(lWhereClause.Trim.IsEmpty) then
-            lWhereClause := lWhereClause + ' AND ';
-          lWhereClause := lWhereClause +
-            lProperty.GetAttribute<TDBColumnAttribute>.FieldName + '=:' +
-            lProperty.Name;
-        end;
-      end;
-
-      if (lWhereClause.Trim.IsEmpty) then
-      begin
-        raise Exception.Create
-          ('Nenhuma propriedade válida fornecida para construir a cláusula WHERE!');
-      end;
-
-      // Monta a consulta UPDATE
-      lSQL := 'UPDATE ' + lTable + ' SET ' + lSets.CommaText + ' WHERE ' +
-        lWhereClause;
-
-      lQuery.Connection := FConnection;
-      lQuery.Close;
-      lQuery.SQL.Clear;
-      lQuery.SQL.Add(lSQL);
-
-      // Definindo parâmetros
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lparamValue := GetParameterValue(pObject, lProperty);
-
-          // Define o valor do parâmetro, ou NULL se for o caso
-          if VarIsNull(lparamValue) then
-            lQuery.Params.ParamByName(lProperty.Name).Clear
-            // Define como NULL
-          else
-            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
-        end;
-      end;
-
-      lQuery.Prepare;
-      lQuery.ExecSQL;
-      Result := True;
-
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create('Erro ao atualizar registro na tabela ' + lTable
-          + ': ' + E.Message);
+        lWhereColumns := lWhereColumns + [lProperty];
+        Break;
       end;
     end;
-  finally
-    lQuery.Free;
-    lContext.Free;
-    lSets.Free;
+
   end;
+
+  if (Length(lWhereColumns) = 0) then
+    raise EWhereVazio.Create;
+
+  lSQL := BuildUpdateSQL(lTable, lColumns, lWhereColumns);
+
+  lParamDict := TDictionary<String, Variant>.Create;
+  try
+
+    for lProperty in lColumns do
+    begin
+      lParamDict.Add(lProperty.Name, GetParamValue(pObject, lProperty));
+    end;
+
+    Result := ExecuteSQL(lSQL, lParamDict);
+
+  finally
+    lParamDict.Free;
+    FPropertiesToWhere.Clear;
+  end;
+
 end;
 
 function TDaoRTTI.DeleteByPK(const pObject: TObject): Boolean;
@@ -710,35 +653,41 @@ end;
 function TDaoRTTI.BuildUpdateSQL(const pTable: String;
   const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
 var
-  lSetList, lWhereList: TStringList;
+  lSetList: TStringList;
   lProperty: TRttiProperty;
   lAttrColumn: TDBColumnAttribute;
+  lWhereClause: String;
+  I: Integer;
 begin
   Result := '';
 
   lSetList := TStringList.Create;
-  lWhereList := TStringList.Create;
+  lWhereClause := '';
   try
 
     for lProperty in pSetCols do
     begin
       lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
-      lSetList.Add(Format('%s = %s', [lAttrColumn.FieldName, lProperty.Name]));
+      lSetList.Add(Format('%s=:%s', [lAttrColumn.FieldName, lProperty.Name]));
     end;
 
-    for lProperty in pWhereCols do
+    for I := 0 to High(pWhereCols) do
     begin
-      lAttrColumn := lProperty.GetAttribute<TDBColumnAttribute>;
-      lWhereList.Add(Format('%s = %s', [lAttrColumn.FieldName,
-        lProperty.Name]));
+
+      lAttrColumn := pWhereCols[I].GetAttribute<TDBColumnAttribute>;
+
+      if (I > 0) then
+        lWhereClause := lWhereClause + ' AND ';
+
+      lWhereClause := lWhereClause + Format('%s=:%s', [lAttrColumn.FieldName, pWhereCols[I].Name]);
+
     end;
 
     Result := Format('UPDATE %s SET %s WHERE %s', [pTable, lSetList.CommaText,
-      lWhereList.CommaText]);
+      lWhereClause]);
 
   finally
     lSetList.Free;
-    lWhereList.Free;
   end;
 
 end;
@@ -809,201 +758,100 @@ begin
 end;
 
 function TDaoRTTI.UpdateBySQLText(const pObject: TObject;
-  const pWhereClause: string = ''): Boolean;
+  const pWhereClause: string): Boolean;
 var
-  lContext: TRttiContext;
-  lType: TRttiType;
+  lContextType: TRttiType;
+  lColumns: TArray<TRttiProperty>;
   lProperty: TRttiProperty;
   lSQL, lTable: string;
-  lQuery: TFDQuery;
-  lparamValue: Variant;
+  lParamDict: TDictionary<String, Variant>;
   lSets: TStringList;
 begin
 
   Result := False;
-  lSQL := '';
-  lTable := '';
-  lContext := TRttiContext.Create;
-  lQuery := TFDQuery.Create(nil);
+
+  if (pWhereClause.Trim.IsEmpty) then
+    raise EWhereVazio.Create;
+
+  lContextType := GetRttiType(pObject);
+  lTable := lContextType.GetAttribute<TDBTable>.TableName;
+
+  lColumns := ExtractColumnProps(lContextType);
+  if (Length(lColumns) = 0) then
+    raise EClasseNaoMapeada.Create(lContextType.Name);
+
   lSets := TStringList.Create;
-
+  lParamDict := TDictionary<String, Variant>.Create;
   try
-    try
 
-      // Verifica se o where não veio vazio para evitar um update sem condição
-      if pWhereClause = '' then
-      begin
-        raise Exception.Create
-          ('É necessário informar uma condição para executar um Update!');
-      end;
-
-      lType := lContext.GetType(pObject.ClassType);
-
-      // Verifica o atributo TDBTable
-      if not CheckTableAttribute(lType) then
-      begin
-        raise Exception.Create('A classe ' + lType.Name +
-          ' possui o atributo TDBTable vazio ou inexistente!');
-      end;
-
-      lTable := lType.GetAttribute<TDBTable>.TableName;
-
-      // Percorre as propriedades para montar a cláusula SET do update
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lSets.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName +
-            ' = :' + lProperty.Name);
-        end;
-      end;
-
-      // Monta a consulta UPDATE
-      lSQL := 'UPDATE ' + lTable + ' SET ' + lSets.CommaText + ' WHERE ' +
-        pWhereClause;
-
-      lQuery.Connection := FConnection;
-      lQuery.Close;
-      lQuery.SQL.Clear;
-      lQuery.SQL.Add(lSQL);
-
-      // Definindo parâmetros
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lparamValue := GetParameterValue(pObject, lProperty);
-
-          // Define o valor do parâmetro, ou NULL se for o caso
-          if VarIsNull(lparamValue) then
-            lQuery.Params.ParamByName(lProperty.Name).Clear
-            // Define como NULL
-          else
-            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
-        end;
-      end;
-
-      lQuery.Prepare;
-      lQuery.ExecSQL;
-      Result := True;
-
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create('Erro ao atualizar registro na tabela ' + lTable
-          + E.Message);
-      end;
+    for lProperty in lColumns do
+    begin
+      lSets.Add(Format('%s=:%s', [lProperty.GetAttribute<TDBColumnAttribute>.FieldName, lProperty.Name]));
+      lParamDict.Add(lProperty.Name, GetParameterValue(pObject, lProperty));
     end;
+
+    lSQL := Format('UPDATE %s SET %s WHERE %s', [lTable, lSets.CommaText, pWhereClause]);
+
+    Result := ExecuteSQL(lSQL, lParamDict);
+
   finally
-    lQuery.Free;
-    lContext.Free;
     lSets.Free;
+    lParamDict.Free;
   end;
+
 end;
 
 function TDaoRTTI.UpdateByPK(const pObject: TObject): Boolean;
 var
-  lContext: TRttiContext;
-  lType: TRttiType;
+  lContextType: TRttiType;
   lProperty, lPk: TRttiProperty;
   lSQL, lTable: string;
-  lQuery: TFDQuery;
-  lparamValue: Variant;
   lPkValue: Variant;
   lCampos: TStringList;
+  lColumns: TArray<TRttiProperty>;
+  lParamDict: TDictionary<String, Variant>;
 begin
 
   Result := False;
-  lSQL := '';
-  lTable := '';
-  lPkValue := 0;
-  lContext := TRttiContext.Create;
-  lQuery := TFDQuery.Create(nil);
-  lCampos := TStringList.Create;
+  lPk := nil;
+
+  lContextType := GetRttiType(pObject);
+  lTable := lContextType.GetAttribute<TDBTable>.TableName;
+
+  // Localiza a propriedade marcada como chave primária
+  for lProperty in lContextType.GetProperties do
+  begin
+    if (lProperty.HasAttribute<TDBIsPrimaryKey>) then
+    begin
+      lPk := lProperty;
+      Break;
+    end;
+  end;
+
+  if (lPk = nil) then
+    raise ESemAtributoChavePrimaria.Create(lTable);
+
+  lPkValue := GetParamValue(pObject, lPk);
+  if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
+    raise EChavePrimariaNula.Create;
+
+  lColumns := ExtractColumnProps(lContextType);
+  lSQL := BuildUpdateSQL(lTable, lColumns, TArray<TRttiProperty>.Create(lPk));
+
+  lParamDict := TDictionary<String, Variant>.Create;
   try
-    try
-      lType := lContext.GetType(pObject.ClassType);
 
-      // Verifica se a classe possui o atributo com o nome da tabela
-      if not CheckTableAttribute(lType) then
-      begin
-        raise Exception.Create('Classe ' + lType.Name +
-          ' está com o atributo TDBTable em branco ou inexistente!');
-      end;
-
-      // Encontra a propriedade com o atributo Chave Primária (PrimaryKey)
-      lPk := FindPrimaryKeyProperty(lType);
-
-      if not(Assigned(lPk)) then
-      begin
-        raise Exception.Create('A classe ' + lType.Name +
-          ' não possui uma propriedade marcada como Chave Primária!');
-      end;
-
-      // Pega a ID associada a propriedade PK
-      lPkValue := GetParameterValue(pObject, lPk);
-
-      if (lPkValue <= 0) then
-      begin
-        raise Exception.Create('Id da PK não pode ser menor ou igual a zero!');
-      end;
-
-      lTable := lType.GetAttribute<TDBTable>.TableName;
-
-      // Percorre as propriedades para montar a cláusula SET do update
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lCampos.Add(lProperty.GetAttribute<TDBColumnAttribute>.FieldName +
-            '=:' + lProperty.Name);
-        end;
-      end;
-
-      // Monta a consulta UPDATE
-      lSQL := 'UPDATE ' + lTable + ' SET ' + lCampos.CommaText + ' WHERE ' +
-        lPk.GetAttribute<TDBColumnAttribute>.FieldName + ' = :' + lPk.Name;
-
-      lQuery.Connection := FConnection;
-      lQuery.Close;
-      lQuery.SQL.Clear;
-      lQuery.SQL.Add(lSQL);
-
-      // Definindo parâmetros
-      for lProperty in lType.GetProperties do
-      begin
-        if CheckColumnsAttribute(lProperty) then
-        begin
-          lparamValue := GetParameterValue(pObject, lProperty);
-
-          // Define o valor do parâmetro, ou NULL se for o caso
-          if VarIsNull(lparamValue) then
-            lQuery.Params.ParamByName(lProperty.Name).Clear
-            // Define como NULL
-          else
-            lQuery.Params.ParamByName(lProperty.Name).Value := lparamValue;
-        end;
-      end;
-
-      // Parametro da PK
-      lQuery.Params.ParamByName(lPk.Name).Value := lPkValue;
-
-      lQuery.Prepare;
-      lQuery.ExecSQL;
-      Result := True;
-
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create('Erro ao atualizar registro na tabela ' + lTable
-          + E.Message);
-      end;
+    for lProperty in lColumns do
+    begin
+      lParamDict.Add(lProperty.Name, GetParamValue(pObject, lProperty));
     end;
 
+    lParamDict.Add(lPk.Name, lPkValue);
+
+    Result := ExecuteSQL(lSQL, lParamDict);
+
   finally
-    lContext.Free;
-    lQuery.Free;
-    lCampos.Free;
+    lParamDict.Free;
   end;
 
 end;
