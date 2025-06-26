@@ -9,8 +9,10 @@ uses
   uDbConnector in 'src\model\uDbConnector.pas',
   uUsuario in 'src\model\uUsuario.pas',
   System.SysUtils,
+  System.UITypes,
   Vcl.Dialogs,
-  Winapi.Windows {frmTesteDaoRTTI};
+  Winapi.Windows,
+  uDaoRTTIExceptions in '..\exceptions\uDaoRTTIExceptions.pas';
 
 {$R *.res}
 
