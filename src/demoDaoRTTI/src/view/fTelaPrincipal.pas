@@ -215,7 +215,7 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 1;
+      lUsuario.Id := 4;
 
       if lUsuario.LoadObjectByPK then
         ShowMessage(lUsuario.Nome + ' ' + lUsuario.Login)

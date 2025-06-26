@@ -682,7 +682,7 @@ begin
     for lProperty in lColumns do
     begin
       lSets.Add(Format('%s=:%s', [lProperty.GetAttribute<TDBColumnAttribute>.FieldName, lProperty.Name]));
-      lParamDict.Add(lProperty.Name, GetParameterValue(pObject, lProperty));
+      lParamDict.Add(lProperty.Name, GetParamValue(pObject, lProperty));
     end;
 
     lSQL := Format('UPDATE %s SET %s WHERE %s', [lTable, lSets.CommaText, pWhereClause]);
@@ -752,93 +752,76 @@ end;
 
 function TDaoRTTI.LoadObjectByPK(const pObject: TObject): Boolean;
 var
-  lContext: TRttiContext;
   lType: TRttiType;
-  lProperty: TRttiProperty;
+  lProperty, lPk: TRttiProperty;
   lSQL, lTable, lFieldName: string;
   lQuery: TFDQuery;
-
+  lPkValue: Variant;
+  lAttr: TDBColumnAttribute;
 begin
+
   Result := False;
-  lContext := TRttiContext.Create;
+
+  lType := GetRttiType(pObject);
+  lTable := lType.GetAttribute<TDBTable>.TableName;
+  lPk := nil;
+
+  for lProperty in lType.GetProperties do
+  begin
+    if (lProperty.HasAttribute<TDBIsPrimaryKey>) then
+    begin
+      lPk := lProperty;
+      Break;
+    end;
+  end;
+
+  if (lPk = nil) then
+    raise ESemAtributoChavePrimaria.Create(lTable);
+
+  lPkValue := GetParamValue(pObject, lPk);
+  if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
+    raise EChavePrimariaNula.Create;
+
+  lSQL := Format('SELECT * FROM %s WHERE %s = :%s', [lTable, lPk.GetAttribute<TDBColumnAttribute>.FieldName, lPk.Name]);
+
   lQuery := TFDQuery.Create(nil);
-  lFieldName := '';
-  lSQL := '';
-  lTable := '';
-
   try
-    try
-      lType := lContext.GetType(pObject.ClassType);
 
-      // Verifica se a classe possui o atributo com o nome da tabela
-      if not CheckTableAttribute(lType) then
-      begin
-        raise Exception.Create('Classe ' + lType.Name +
-          ' está com o atributo TDBTable em branco ou inexistente!');
-      end;
+    lQuery.Connection := FConnection;
+    lQuery.SQL.Text := lSQL;
+    lQuery.ParamByName(lPk.Name).Value := lPkValue;
+    lQuery.Open;
 
-      lQuery.Connection := FConnection;
+    if not(lQuery.IsEmpty) then
+    begin
 
-      // Encontra a propriedade com o atributo Chave Primária (PrimaryKey)
-      lProperty := FindPrimaryKeyProperty(lType);
-
-      if lProperty = nil then
-      begin
-        raise Exception.Create('A classe ' + lType.Name +
-          ' não possui uma propriedade marcada como Chave Primária!');
-      end;
-
-      // Monta a consulta SQL
-      lTable := lType.GetAttribute<TDBTable>.TableName;
-      lSQL := 'SELECT * FROM ' + lTable + ' WHERE ' +
-        lProperty.GetAttribute<TDBColumnAttribute>.FieldName + ' = :' +
-        lProperty.Name;
-
-      // Executa a consulta SQL
-      lQuery.Close;
-      lQuery.SQL.Clear;
-      lQuery.SQL.Add(lSQL);
-      lQuery.Params.ParamByName(lProperty.Name).Value :=
-        GetParameterValue(pObject, lProperty);
-      lQuery.Open;
-
-      if not(lQuery.IsEmpty) then
+      for lProperty in lType.GetProperties do
       begin
 
-        // Atribui os valores das colunas às propriedades do objeto
-        for lProperty in lType.GetProperties do
+        if (lProperty.HasAttribute<TDBColumnAttribute>) then
         begin
-          lFieldName := lProperty.GetAttribute<TDBColumnAttribute>.FieldName;
 
-          if lQuery.FindField(lFieldName) <> nil then
+          lAttr := lProperty.GetAttribute<TDBColumnAttribute>;
+          lFieldName := lAttr.FieldName;
+
+          if ((lQuery.FindField(lFieldName) <> nil) and (not lQuery.FieldByName(lFieldName).IsNull)) then
           begin
-            if not lQuery.FieldByName(lFieldName).IsNull then
-            begin
-              // Verificação de propriedades do tipo Data
-              if (lProperty.PropertyType.TypeKind = tkFloat) and
-                (lProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
-                lProperty.SetValue(pObject,
-                  TValue.From<TDateTime>(lQuery.FieldByName(lFieldName)
-                  .AsDateTime))
-              else
-                lProperty.SetValue(pObject,
-                  TValue.FromVariant(lQuery.FieldByName(lFieldName).Value));
-            end;
+            if ((lProperty.PropertyType.TypeKind = tkFloat) and (lProperty.PropertyType.Handle = TypeInfo(TDateTime)))
+            then
+              lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lFieldName).AsDateTime))
+            else
+              lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lFieldName).Value));
           end;
+
         end;
 
-        Result := True;
       end;
 
-    except
-      on E: Exception do
-      begin
-        raise Exception.Create('Erro ao executar a consulta SQL: ' + E.Message);
-      end;
+      Result := True;
+
     end;
 
   finally
-    lContext.Free;
     lQuery.Free;
   end;
 

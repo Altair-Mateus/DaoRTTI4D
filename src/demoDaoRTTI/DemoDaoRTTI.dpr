@@ -11,7 +11,7 @@ uses
   System.SysUtils,
   System.UITypes,
   Vcl.Dialogs,
-  Winapi.Windows {frmTesteDaoRTTI},
+  Winapi.Windows,
   uDaoRTTIExceptions in '..\exceptions\uDaoRTTIExceptions.pas';
 
 {$R *.res}
