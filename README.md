@@ -1,7 +1,5 @@
 # uDaoRTTI
 
-## Descrição
-
 `uDaoRTTI` é uma biblioteca **leve** e **flexível** para Delphi que **automatiza** operações CRUD (Create, Read, Update, Delete) de forma **genérica**, sem acoplamento à camada de dados.
 
 * **Produtividade**: elimina a escrita manual de SQL, bastando decorar suas classes com atributos.

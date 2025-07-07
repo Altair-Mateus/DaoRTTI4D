@@ -12,7 +12,10 @@ uses
   System.UITypes,
   Vcl.Dialogs,
   Winapi.Windows,
-  uDaoRTTIExceptions in '..\exceptions\uDaoRTTIExceptions.pas';
+  uDaoRTTIExceptions in '..\exceptions\uDaoRTTIExceptions.pas',
+  uITransactionScope in '..\interfaces\uITransactionScope.pas',
+  uTransactionScope in '..\transactions\uTransactionScope.pas',
+  uDbConfigExceptions in '..\exceptions\uDbConfigExceptions.pas';
 
 {$R *.res}
 
