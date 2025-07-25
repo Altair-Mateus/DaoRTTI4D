@@ -662,7 +662,8 @@ begin
       lParamDict.Add(lProperty.Name, GetParamValue(pObject, lProperty));
     end;
 
-    lParamDict.Add(lPk.Name, lPkValue);
+    if (lPk.HasAttribute<TDBIsAutoIncrement>) then
+      lParamDict.Add(lPk.Name, lPkValue);
 
     Result := ExecuteSQL(lSQL, lParamDict);
 
