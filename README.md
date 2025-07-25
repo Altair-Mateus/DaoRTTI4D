@@ -87,7 +87,10 @@
    * `uDaoRTTI.pas` (em **src/model**)
    * `uDBAttributes.pas` (em **src/model**)
    * `uDaoRTTIExceptions.pas` (em **src/exceptions**)
+   * `uDbConfigExceptions.pas` (em **src/exceptions**)
    * `uDbConfig.pas` (em **src/config**)
+   * `uITransactionScope.pas` (em **src/interfaces**)
+   * `uTransactionScope.pas` (em **src/transactions**)
 
 2. **Inicialize** a conexão antes de usar o DAO e **finalize** ao encerrar a execução do seu projeto. Você pode fazer isso em qualquer parte do seu código. A seguir dois exemplos extraídos da demo:
 
@@ -176,6 +179,70 @@
      Result := FDaoRTTI.Insert(Self);
    end;
    ```
+## Transações Avançadas
+
+Com a versão mais recente, **uDaoRTTI** agora integra suporte a transações via `TTransactionScope`, para que você possa agrupar múltiplas operações CRUD em diferentes tabelas dentro de um mesmo bloco transacional:
+
+1. **Definição do escopo transacional**:
+
+   ```pascal
+   uses
+     uTransactionScope, uUsuario, uObsUsuarios;
+
+   procedure TfrmTelaPrincipal.InsertMultiplasTabelas;
+   var
+     lUsuario: TUsuario;
+     lObs: TObsUsuarios;
+     lTransaction: ITransactionScope;
+   begin
+     lTransaction := TTransactionScope.Create;
+     try
+       // Atualiza usuário
+       lUsuario := TUsuario.Create;
+       try
+         lUsuario.Id := 7;
+         lUsuario.Nome := 'Altair';
+         // ... outros campos ...
+         lUsuario.UpdateByPK;
+       finally
+         lUsuario.Free;
+       end;
+
+       // Insere observação de log
+       lObs := TObsUsuarios.Create;
+       try
+         lObs.IdUsuario := 7;
+         lObs.Descricao := 'Usuário alterado para administrador';
+         lObs.Insert;
+       finally
+         lObs.Free;
+       end;
+
+       // Confirma transação (commit)
+       lTransaction.Commit;
+     except
+       on E: Exception do
+       begin
+         // Em caso de erro, rollback automático no destructor
+         ShowMessage('Erro ao processar transação: ' + E.Message);
+       end;
+     end;
+   end;
+   ```
+
+2. **Como funciona**:
+
+   * O construtor de `TTransactionScope` chama `InitTransaction`.
+   * `Commit` finaliza e libera o escopo.
+   * Se você chamar `CommitRetaining(True)`, ainda mantém a transação ativa até o commit final.
+   * Se o escopo for destruído sem `Commit`, será executado `Rollback` automaticamente.
+
+3. **Exceções**:
+
+   * Qualquer falha em `InitTransaction`, `Commit`, `Rollback` etc. usa as exceções de `uDbConfigExceptions` para mensagens claras e consistentes.
+
+Com isso, o `uDaoRTTI` passa a oferecer não só CRUD dinâmico, mas também **controle transacional completo** para cenários de múltiplas tabelas e operações atômicas.
+
 
 ## Projeto de exemplo completo
 
