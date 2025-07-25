@@ -178,6 +178,16 @@ object frmTelaPrincipal: TfrmTelaPrincipal
               TabOrder = 0
               OnClick = btnInsertClick
             end
+            object btnInsertMultiplos: TButton
+              Left = 153
+              Top = 30
+              Width = 121
+              Height = 40
+              Caption = 'Insert M'#250'tiplas Tabelas'
+              TabOrder = 1
+              WordWrap = True
+              OnClick = btnInsertMultiplosClick
+            end
           end
         end
       end
@@ -303,7 +313,7 @@ object frmTelaPrincipal: TfrmTelaPrincipal
               Top = 30
               Width = 121
               Height = 40
-              Caption = 'LoadByPK'
+              Caption = 'Load by PK'
               TabOrder = 0
               OnClick = btnLoadClick
             end

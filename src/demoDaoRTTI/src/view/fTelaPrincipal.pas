@@ -58,6 +58,7 @@ type
     lblDev: TLabel;
     btnGithub: TButton;
     btnLinkedin: TButton;
+    btnInsertMultiplos: TButton;
     procedure btnInsertClick(Sender: TObject);
     procedure btnLoadClick(Sender: TObject);
     procedure btnUpdateSQLClick(Sender: TObject);
@@ -68,8 +69,21 @@ type
     procedure btnDeletePropClick(Sender: TObject);
     procedure btnGithubClick(Sender: TObject);
     procedure btnLinkedinClick(Sender: TObject);
+    procedure btnInsertMultiplosClick(Sender: TObject);
   private
-    { Private declarations }
+    procedure Insert;
+    procedure InsertMultiplasTabelas;
+
+    procedure UpdateByPk;
+    procedure UpdateByTextSQL;
+    procedure UpdateByProp;
+
+    procedure DeleteByPk;
+    procedure DeleteByTextSQL;
+    procedure DeleteByProp;
+
+    procedure LoadByPk;
+
   public
     { Public declarations }
   end;
@@ -83,9 +97,69 @@ implementation
 
 
 uses
-  uUsuario;
+  uUsuario,
+  uObsUsuarios,
+  uTransactionScope;
 
 procedure TfrmTelaPrincipal.btnDeleteByPKClick(Sender: TObject);
+begin
+  DeleteByPk;
+end;
+
+procedure TfrmTelaPrincipal.btnDeletePropClick(Sender: TObject);
+begin
+  DeleteByProp;
+end;
+
+procedure TfrmTelaPrincipal.btnDeleteSQLClick(Sender: TObject);
+begin
+  DeleteByTextSQL;
+end;
+
+procedure TfrmTelaPrincipal.btnGithubClick(Sender: TObject);
+begin
+  ShellExecute(0, 'open', 'https://github.com/Altair-Mateus', nil, nil,
+    SW_SHOWNORMAL);
+end;
+
+procedure TfrmTelaPrincipal.btnInsertClick(Sender: TObject);
+begin
+  Insert;
+end;
+
+procedure TfrmTelaPrincipal.btnInsertMultiplosClick(Sender: TObject);
+begin
+  InsertMultiplasTabelas;
+end;
+
+procedure TfrmTelaPrincipal.btnLinkedinClick(Sender: TObject);
+begin
+  ShellExecute(0, 'open',
+    'https://www.linkedin.com/in/altair-mateus-t-alencastro/', nil, nil,
+    SW_SHOWNORMAL);
+end;
+
+procedure TfrmTelaPrincipal.btnLoadClick(Sender: TObject);
+begin
+  LoadByPk;
+end;
+
+procedure TfrmTelaPrincipal.btnUpdatePKClick(Sender: TObject);
+begin
+  UpdateByPk;
+end;
+
+procedure TfrmTelaPrincipal.btnUpdatePropClick(Sender: TObject);
+begin
+  UpdateByProp;
+end;
+
+procedure TfrmTelaPrincipal.btnUpdateSQLClick(Sender: TObject);
+begin
+  UpdateByTextSQL;
+end;
+
+procedure TfrmTelaPrincipal.DeleteByPk;
 var
   lUsuario: TUsuario;
 begin
@@ -93,7 +167,7 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 5;
+      lUsuario.Id := 9;
 
       if lUsuario.DeleteByPk then
         ShowMessage('Registro EXCLUIDO')
@@ -110,7 +184,7 @@ begin
   end;
 end;
 
-procedure TfrmTelaPrincipal.btnDeletePropClick(Sender: TObject);
+procedure TfrmTelaPrincipal.DeleteByProp;
 var
   lUsuario: TUsuario;
 begin
@@ -138,9 +212,10 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
-procedure TfrmTelaPrincipal.btnDeleteSQLClick(Sender: TObject);
+procedure TfrmTelaPrincipal.DeleteByTextSQL;
 var
   lUsuario: TUsuario;
 begin
@@ -163,15 +238,10 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
-procedure TfrmTelaPrincipal.btnGithubClick(Sender: TObject);
-begin
-  ShellExecute(0, 'open', 'https://github.com/Altair-Mateus', nil, nil,
-    SW_SHOWNORMAL);
-end;
-
-procedure TfrmTelaPrincipal.btnInsertClick(Sender: TObject);
+procedure TfrmTelaPrincipal.Insert;
 var
   lUsuario: TUsuario;
 begin
@@ -201,21 +271,50 @@ begin
   end;
 end;
 
-procedure TfrmTelaPrincipal.btnLinkedinClick(Sender: TObject);
+procedure TfrmTelaPrincipal.InsertMultiplasTabelas;
+var
+  lUsuario: TUsuario;
+  lObs: TObsUsuarios;
+  lTransaction: TTransactionScope;
 begin
-  ShellExecute(0, 'open',
-    'https://www.linkedin.com/in/altair-mateus-t-alencastro/', nil, nil,
-    SW_SHOWNORMAL);
+
+  lTransaction := TTransactionScope.Create;
+
+  lUsuario := TUsuario.Create;
+  lObs := TObsUsuarios.Create;
+  try
+
+    lUsuario.Id := 7;
+    lUsuario.Nome := 'Altair';
+    lUsuario.Login := '21';
+    lUsuario.Senha := '12345';
+    lUsuario.Status := 'A';
+    lUsuario.Data_Cadastro := Now;
+    lUsuario.Senha_Temp := 'N';
+    lUsuario.User_Admin := 'S';
+    lUsuario.UpdateByPk;
+
+    lObs.IdUsuario := lUsuario.Id;
+    lObs.Descricao := 'Usuário alterado para administrador';
+    lObs.Insert;
+
+    lTransaction.Commit;
+
+  finally
+    lUsuario.Free;
+    lObs.Free;
+    lTransaction.Free;
+  end;
 end;
 
-procedure TfrmTelaPrincipal.btnLoadClick(Sender: TObject);
+procedure TfrmTelaPrincipal.LoadByPk;
 var
   lUsuario: TUsuario;
 begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 4;
+      lUsuario.Id := 9;
 
       if lUsuario.LoadObjectByPK then
         ShowMessage(lUsuario.Nome + ' ' + lUsuario.Login)
@@ -230,9 +329,10 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
-procedure TfrmTelaPrincipal.btnUpdatePKClick(Sender: TObject);
+procedure TfrmTelaPrincipal.UpdateByPk;
 var
   lUsuario: TUsuario;
 begin
@@ -240,7 +340,7 @@ begin
   lUsuario := TUsuario.Create;
   try
     try
-      lUsuario.Id := 5;
+      lUsuario.Id := 9;
       lUsuario.Nome := 'teste UpdateByPK';
       lUsuario.Login := '10';
       lUsuario.Senha := '12345';
@@ -249,7 +349,7 @@ begin
       lUsuario.Senha_Temp := 'N';
       lUsuario.User_Admin := 'N';
 
-      if lUsuario.UpdateByPK then
+      if lUsuario.UpdateByPk then
         ShowMessage('Registro Editado')
     except
       on E: Exception do
@@ -262,9 +362,10 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
-procedure TfrmTelaPrincipal.btnUpdatePropClick(Sender: TObject);
+procedure TfrmTelaPrincipal.UpdateByProp;
 var
   lUsuario: TUsuario;
 begin
@@ -297,9 +398,10 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
-procedure TfrmTelaPrincipal.btnUpdateSQLClick(Sender: TObject);
+procedure TfrmTelaPrincipal.UpdateByTextSQL;
 var
   lUsuario: TUsuario;
 begin
@@ -329,6 +431,7 @@ begin
   finally
     lUsuario.Free;
   end;
+
 end;
 
 end.

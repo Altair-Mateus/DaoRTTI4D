@@ -3,8 +3,11 @@ unit uUsuario;
 interface
 
 uses
-  uDBAttributes, uDaoRTTI,
-  System.SysUtils, Vcl.Forms, Winapi.Windows;
+  uDBAttributes,
+  uDaoRTTI,
+  System.SysUtils,
+  Vcl.Forms,
+  Winapi.Windows;
 
 type
 
@@ -97,7 +100,6 @@ function TUsuario.DeleteBySQLText(const pWhere: String): Boolean;
 begin
   Result := FDaoRTTI.DeleteBySQLText(Self, pWhere);
 end;
-
 
 function TUsuario.LoadObjectByPK: Boolean;
 begin
