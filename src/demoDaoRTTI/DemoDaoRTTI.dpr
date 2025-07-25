@@ -15,7 +15,8 @@ uses
   uDaoRTTIExceptions in '..\exceptions\uDaoRTTIExceptions.pas',
   uITransactionScope in '..\interfaces\uITransactionScope.pas',
   uTransactionScope in '..\transactions\uTransactionScope.pas',
-  uDbConfigExceptions in '..\exceptions\uDbConfigExceptions.pas';
+  uDbConfigExceptions in '..\exceptions\uDbConfigExceptions.pas',
+  uObsUsuarios in 'src\model\uObsUsuarios.pas';
 
 {$R *.res}
 

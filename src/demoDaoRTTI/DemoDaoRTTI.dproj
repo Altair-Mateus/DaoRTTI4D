@@ -145,6 +145,10 @@
         <DCCReference Include="src\model\uDbConnector.pas"/>
         <DCCReference Include="src\model\uUsuario.pas"/>
         <DCCReference Include="..\exceptions\uDaoRTTIExceptions.pas"/>
+        <DCCReference Include="..\interfaces\uITransactionScope.pas"/>
+        <DCCReference Include="..\transactions\uTransactionScope.pas"/>
+        <DCCReference Include="..\exceptions\uDbConfigExceptions.pas"/>
+        <DCCReference Include="src\model\uObsUsuarios.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

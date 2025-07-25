@@ -77,7 +77,7 @@
 
 * **Delphi** (Object Pascal)
 * **FireDAC** (acesso a dados)
-* **RTTI** (sistema de reflexão)
+* **RTTI** (Run-Time Type Information)
 * **Atributos personalizados** (`uDBAttributes`)
 
 ## Como incluir no seu projeto
@@ -89,7 +89,7 @@
    * `uDaoRTTIExceptions.pas` (em **src/exceptions**)
    * `uDbConfig.pas` (em **src/config**)
 
-2. **Inicialize** a conexão antes de usar o DAO e **finalize** ao encerrar a execução do seu projeto. Você pode fazer isso em qualquer parte do seu código (não precisa ser no `.dpr`). A seguir dois exemplos extraídos da demo:
+2. **Inicialize** a conexão antes de usar o DAO e **finalize** ao encerrar a execução do seu projeto. Você pode fazer isso em qualquer parte do seu código. A seguir dois exemplos extraídos da demo:
 
    **a) Inicialização via `TDbConnector.Connect`:**
 
