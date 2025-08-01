@@ -23,7 +23,10 @@ uses
   System.Classes,
   System.TypInfo,
   System.UITypes,
-  System.Generics.Collections;
+  System.Generics.Collections,
+  System.StrUtils,
+  System.Math,
+  Vcl.Dialogs;
 
 type
   TDaoRTTI = class
@@ -411,6 +414,32 @@ begin
 
   end;
 
+  // Converte para tipos Booleanos e persiste como String
+  if (pProperty.HasAttribute<TDBSaveBoolean>) and (lValue.TypeInfo = TypeInfo(Boolean)) then
+  begin
+    case pProperty.GetAttribute<TDBSaveBoolean>.BooleanType of
+
+      btSN:
+        begin
+          Result := IfThen(lValue.AsBoolean, 'S', 'N');
+          Exit;
+        end;
+
+      btAI:
+        begin
+          Result := IfThen(lValue.AsBoolean, 'A', 'I');
+          Exit;
+        end;
+
+      btZeroUm:
+        begin
+          Result := IfThen(lValue.AsBoolean, 1, 0);
+          Exit;
+        end;
+
+    end;
+  end;
+
   // Converte o TValue para tipos específicos para persistir no banco de dados
   if (lValue.TypeInfo = TypeInfo(TDate)) then
     Result := FormatDateTime('yyyy/mm/dd', lValue.AsExtended)
@@ -720,11 +749,45 @@ begin
 
           if ((lQuery.FindField(lFieldName) <> nil) and (not lQuery.FieldByName(lFieldName).IsNull)) then
           begin
-            if ((lProperty.PropertyType.TypeKind = tkFloat) and (lProperty.PropertyType.Handle = TypeInfo(TDateTime)))
-            then
-              lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lFieldName).AsDateTime))
+
+            case lProperty.PropertyType.TypeKind of
+
+              tkEnumeration:
+                begin
+                  if (lProperty.PropertyType.Handle = TypeInfo(Boolean)) then
+                  begin
+                    case lProperty.GetAttribute<TDBSaveBoolean>.BooleanType of
+
+                      btSN:
+                        lProperty.SetValue(pObject, lQuery.FieldByName(lFieldName).AsString = 'S');
+
+                      btAI:
+                        lProperty.SetValue(pObject, lQuery.FieldByName(lFieldName).AsString = 'A');
+
+                      btZeroUm:
+                        lProperty.SetValue(pObject, lQuery.FieldByName(lFieldName).AsInteger = 1);
+                    else
+                      lProperty.SetValue(pObject, lQuery.FieldByName(lFieldName).AsInteger = 1);
+                    end;
+                  end
+                  else
+                  begin
+                    lProperty.SetValue(pObject, TValue.FromOrdinal(lProperty.PropertyType.Handle,
+                      lQuery.FieldByName(lFieldName).AsInteger));
+                  end;
+                end;
+
+              tkFloat:
+                begin
+                  if (lProperty.PropertyType.Handle = TypeInfo(TDateTime)) then
+                    lProperty.SetValue(pObject, TValue.From<TDateTime>(lQuery.FieldByName(lFieldName).AsDateTime))
+                  else
+                    lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lFieldName).Value));
+                end;
             else
               lProperty.SetValue(pObject, TValue.FromVariant(lQuery.FieldByName(lFieldName).Value));
+            end;
+
           end;
 
         end;
