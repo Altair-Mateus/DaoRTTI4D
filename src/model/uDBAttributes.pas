@@ -6,12 +6,15 @@ uses
   System.SysUtils;
 
 type
+
+  TDBBooleanType = (btSN, btAI, btZeroUm);
+
   // Atributo para a coluna da tabela
   TDBColumnAttribute = class(TCustomAttribute)
   private
     FFieldName: string;
   public
-    constructor Create(const AFieldName: string);
+    constructor Create(const pFieldName: string);
 
     // Nome da coluna no banco de dados
     property FieldName: string read FFieldName;
@@ -22,7 +25,7 @@ type
   private
     FTableName: String;
   public
-    constructor Create(const ATableName: String);
+    constructor Create(const pTableName: String);
     property TableName: String read FTableName write FTableName;
   end;
 
@@ -38,6 +41,14 @@ type
   TDBAcceptNull = class(TCustomAttribute)
   end;
 
+  TDBSaveBoolean = class(TCustomAttribute)
+  private
+    FBooleanType: TDBBooleanType;
+  public
+    constructor Create(const pBooleanType: TDBBooleanType);
+    property BooleanType: TDBBooleanType read FBooleanType write FBooleanType;
+  end;
+
 implementation
 
 {
@@ -46,16 +57,23 @@ implementation
   de dados. A mesma indica as propriedades das tabelas e colunas do banco de dados.
 }
 
-constructor TDBColumnAttribute.Create(const AFieldName: string);
+constructor TDBColumnAttribute.Create(const pFieldName: string);
 begin
-  FFieldName := AFieldName;
+  FFieldName := pFieldName;
 end;
 
 { TDBTable }
 
-constructor TDBTable.Create(const ATableName: String);
+constructor TDBTable.Create(const pTableName: String);
 begin
-  FTableName := ATableName;
+  FTableName := pTableName;
+end;
+
+{ TDBSaveBoolean }
+
+constructor TDBSaveBoolean.Create(const pBooleanType: TDBBooleanType);
+begin
+  FBooleanType := pBooleanType;
 end;
 
 end.
