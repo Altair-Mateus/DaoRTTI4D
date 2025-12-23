@@ -6,91 +6,103 @@ uses
   System.SysUtils;
 
 type
-  ESemAtributoTabela = class(Exception)
+  EDaoRTTISemAtributoTabela = class(Exception)
   public
     constructor Create(const pNomeTabela: String);
   end;
 
-  EExecutarSQL = class(Exception)
+  EDaoRTTIExecutarSQL = class(Exception)
   public
     constructor Create(const pErro: String);
   end;
 
-  EClasseNaoMapeada = class(Exception)
+  EDaoRTTIClasseNaoMapeada = class(Exception)
   public
     constructor Create(const pNomeClasse: String);
   end;
 
-  EWhereVazio = class(Exception)
+  EDaoRTTIWhereVazio = class(Exception)
   public
     constructor Create;
   end;
 
-  ESemAtributoChavePrimaria = class(Exception)
+  EDaoRTTISemAtributoChavePrimaria = class(Exception)
   public
     constructor Create(const pNomeClasse: String);
   end;
 
-  EChavePrimariaNula = class(Exception)
+  EDaoRTTIChavePrimariaNula = class(Exception)
   public
     constructor Create;
   end;
 
-  ESemPropriedadeLista = class(Exception)
+  EDaoRTTISemPropriedadeLista = class(Exception)
+  public
+    constructor Create;
+  end;
+
+  EDaoRTTIObjetoNulo = class(Exception)
   public
     constructor Create;
   end;
 
 implementation
 
-{ ESemAtributoTabela }
+{ EDaoRTTISemAtributoTabela }
 
-constructor ESemAtributoTabela.Create(const pNomeTabela: String);
+constructor EDaoRTTISemAtributoTabela.Create(const pNomeTabela: String);
 begin
   inherited CreateFmt('Classe %s não possui atributo [TDBTable].',
     [pNomeTabela])
 end;
 
-{ EExecutarSQL }
+{ EDaoRTTIExecutarSQL }
 
-constructor EExecutarSQL.Create(const pErro: String);
+constructor EDaoRTTIExecutarSQL.Create(const pErro: String);
 begin
   inherited Create('Erro ao executar SQL: ' + pErro);
 end;
 
-{ EClasseNaoMapeada }
+{ EDaoRTTIClasseNaoMapeada }
 
-constructor EClasseNaoMapeada.Create(const pNomeClasse: String);
+constructor EDaoRTTIClasseNaoMapeada.Create(const pNomeClasse: String);
 begin
   inherited CreateFmt('Classe %s não possui propiedades mapeadas ou somente propriedade com AutoInc', [pNomeClasse]);
 end;
 
-{ EWhereVazio }
+{ EDaoRTTIWhereVazio }
 
-constructor EWhereVazio.Create;
+constructor EDaoRTTIWhereVazio.Create;
 begin
   inherited Create('É necessário informar uma condição para executar um Update!');
 end;
 
-{ ESemAtributoChavePrimaria }
+{ EDaoRTTISemAtributoChavePrimaria }
 
-constructor ESemAtributoChavePrimaria.Create(const pNomeClasse: String);
+constructor EDaoRTTISemAtributoChavePrimaria.Create(const pNomeClasse: String);
 begin
   inherited CreateFmt('Classe %s não possui propriedade marcada como chave primária!', [pNomeClasse]);
 end;
 
-{ EChavePrimariaNula }
+{ EDaoRTTIChavePrimariaNula }
 
-constructor EChavePrimariaNula.Create;
+constructor EDaoRTTIChavePrimariaNula.Create;
 begin
   inherited Create('Id da PK não pode ser nulo ou menor/igual a zero!');
 end;
 
-{ ESemPropriedadeLista }
+{ EDaoRTTISemPropriedadeLista }
 
-constructor ESemPropriedadeLista.Create;
+constructor EDaoRTTISemPropriedadeLista.Create;
 begin
   inherited Create('Nenhuma propriedade fornecida para construir a cláusula WHERE!');
+end;
+
+{ EDaoRTTIObjetoNulo }
+
+constructor EDaoRTTIObjetoNulo.Create;
+begin
+  inherited Create('Falha ao obter objeto da classe!');
 end;
 
 end.

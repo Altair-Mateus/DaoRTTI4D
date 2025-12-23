@@ -29,11 +29,24 @@ uses
   Vcl.Dialogs;
 
 type
+  // Enumerador para usar no join
+  TTipoJoin = (tNotUse, tInnerJoin, tLeftJoin, tRightJoin, tFullJoin, tCrossJoin, tNaturalJoin);
+  // Enumerador para usar no like
+  TTipoLike = (tlNotUse, lStartsWith, tlEndsWith, tlContains);
+  // Enumerador para operadores de comparação
+  TComparisonOperators = (tcoEqual, tcoLess, tcoGreater, tcoLessEqual, tcoGreaterEqual, tcoNotEqual);
+  // Enumerado para usar em funções que comparam com valores nulos
+  TTipoNull = (tnNull, tnNotNull);
+  // Enumerador para operadores lógicos
+  TLogicalOperators = (loAnd, loOr, loNot);
+
   TDaoRTTI = class
   private
     FContext: TRttiContext;
     FPropertiesToWhere: TStringList;
     FConnection: TFDConnection;
+    FTextSelect: TStringList;
+    FObjeto: TObject;
 
     // Verifica se a classe possui o atributo com o nome da tabela
     function CheckTableAttribute(pType: TRttiType): Boolean;
@@ -51,13 +64,19 @@ type
     function BuildInsertSQL(const pTable: String; const pColumns: TArray<TRttiProperty>): String;
     function BuildUpdateSQL(const pTable: String; const pSetCols, pWhereCols: TArray<TRttiProperty>): String;
     function BuildDeleteSQL(const pTable: String; const pWhereCols: TArray<TRttiProperty>): String;
+    function BuildWhereSQL(const pWhereCols: TArray<TRttiProperty>): String;
     function ExecuteSQL(const pSql: String; const pParamDict: TDictionary<String, Variant>): Boolean;
     function ExtractColumnProps(const pType: TRttiType): TArray<TRttiProperty>;
 
     // Realiza a conversão do tipo Variant
     function GetParamValue(const pObject: TObject; const pProperty: TRttiProperty): Variant;
 
+    procedure ClearTextSelect;
+
   public
+
+    constructor Create;
+    destructor Destroy; override;
 
     function Insert(const pObject: TObject): Boolean;
 
@@ -86,8 +105,15 @@ type
     // Retorna a String List usada no Where de um Update ou Delete
     function GetPropertiesToWhere: TStringList;
 
-    constructor Create;
-    destructor Destroy; override;
+    function Get(const pObject: TObject): TDaoRTTI;
+    function GetList(const pObject: TObject): TDaoRTTI;
+    function Where(const pPropMemRef: Pointer; const pValueSought: Variant): TDaoRTTI; overload;
+    function Where(const pSQLText: string): TDaoRTTI; overload;
+    function OrderBy(const pPropMemRef: Pointer; const pDesc: Boolean = False): TDaoRTTI;
+    function Open: Boolean;
+    function OpenSelect: Boolean;
+    function Execute(const pCommit: Boolean): Boolean;
+    function RecordExists: Boolean;
 
   end;
 
@@ -112,11 +138,17 @@ begin
 
 end;
 
+procedure TDaoRTTI.ClearTextSelect;
+begin
+  FTextSelect.Clear;
+end;
+
 constructor TDaoRTTI.Create;
 begin
   FConnection := TDbConfig.Connection;
   FPropertiesToWhere := TStringList.Create;
   FContext := TRttiContext.Create;
+  FTextSelect := TStringList.Create;
 end;
 
 function TDaoRTTI.UpdateByProp(const pObject: TObject): Boolean;
@@ -134,7 +166,7 @@ begin
   lTable := lType.GetAttribute<TDBTable>.TableName;
 
   if (FPropertiesToWhere.Count = 0) then
-    raise ESemPropriedadeLista.Create;
+    raise EDaoRTTISemPropriedadeLista.Create;
 
   lColumns := ExtractColumnProps(lType);
 
@@ -154,7 +186,7 @@ begin
   end;
 
   if (Length(lWhereColumns) = 0) then
-    raise EWhereVazio.Create;
+    raise EDaoRTTIWhereVazio.Create;
 
   lSQL := BuildUpdateSQL(lTable, lColumns, lWhereColumns);
 
@@ -191,11 +223,11 @@ begin
 
   lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
-    raise ESemAtributoChavePrimaria.Create(lTable);
+    raise EDaoRTTISemAtributoChavePrimaria.Create(lTable);
 
   lPkValue := GetParamValue(pObject, lPk);
   if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
-    raise EChavePrimariaNula.Create;
+    raise EDaoRTTIChavePrimariaNula.Create;
 
   lSQL := BuildDeleteSQL(lTable, TArray<TRttiProperty>.Create(lPk));
 
@@ -228,7 +260,7 @@ begin
   lTable := lType.GetAttribute<TDBTable>.TableName;
 
   if (FPropertiesToWhere.Count = 0) then
-    raise ESemPropriedadeLista.Create;
+    raise EDaoRTTISemPropriedadeLista.Create;
 
   lWhereColumns := [];
   for lProp in FPropertiesToWhere do
@@ -246,7 +278,7 @@ begin
   end;
 
   if (Length(lWhereColumns) = 0) then
-    raise EWhereVazio.Create;
+    raise EDaoRTTIWhereVazio.Create;
 
   lSQL := BuildDeleteSQL(lTable, lWhereColumns);
 
@@ -277,7 +309,7 @@ begin
   Result := False;
 
   if (pWhereClause.Trim.IsEmpty) then
-    raise EWhereVazio.Create;
+    raise EDaoRTTIWhereVazio.Create;
 
   lType := GetRttiType(pObject);
   lTable := lType.GetAttribute<TDBTable>.TableName;
@@ -292,7 +324,13 @@ destructor TDaoRTTI.Destroy;
 begin
   FPropertiesToWhere.Free;
   FContext.Free;
+  FTextSelect.Free;
   inherited;
+end;
+
+function TDaoRTTI.Execute(const pCommit: Boolean): Boolean;
+begin
+
 end;
 
 function TDaoRTTI.ExecuteSQL(const pSql: String;
@@ -328,7 +366,7 @@ begin
     except
       on E: Exception do
       begin
-        raise EExecutarSQL.Create(E.Message);
+        raise EDaoRTTIExecutarSQL.Create(E.Message);
       end;
     end;
   finally
@@ -375,6 +413,51 @@ begin
       Exit;
     end;
   end;
+
+end;
+
+function TDaoRTTI.Get(const pObject: TObject): TDaoRTTI;
+var
+  lType: TRttiType;
+  lPk: TRttiProperty;
+  lTable: string;
+begin
+
+  ClearTextSelect;
+  FObjeto := pObject;
+
+  lType := GetRttiType(FObjeto);
+  lTable := lType.GetAttribute<TDBTable>.TableName;
+
+  lPk := FindPrimaryKeyProperty(lType);
+  if (lPk = nil) then
+    raise EDaoRTTISemAtributoChavePrimaria.Create(lTable);
+
+  FTextSelect.Add(Format(' SELECT FIRST 1 %s FROM %s', [lPk.GetAttribute<TDBColumnAttribute>.FieldName, lTable]));
+
+  Result := Self;
+end;
+
+function TDaoRTTI.GetList(const pObject: TObject): TDaoRTTI;
+var
+  lType: TRttiType;
+  lPk: TRttiProperty;
+  lTable: string;
+begin
+
+  ClearTextSelect;
+  FObjeto := pObject;
+
+  lType := GetRttiType(FObjeto);
+  lTable := lType.GetAttribute<TDBTable>.TableName;
+
+  lPk := FindPrimaryKeyProperty(lType);
+  if (lPk = nil) then
+    raise EDaoRTTISemAtributoChavePrimaria.Create(lTable);
+
+  FTextSelect.Add(Format(' SELECT %s FROM %s', [lPk.GetAttribute<TDBColumnAttribute>.FieldName, lTable]));
+
+  Result := Self;
 
 end;
 
@@ -555,11 +638,20 @@ begin
 
 end;
 
+function TDaoRTTI.BuildWhereSQL(
+  const pWhereCols: TArray<TRttiProperty>): String;
+begin
+  Result := '';
+
+
+
+end;
+
 function TDaoRTTI.GetRttiType(const pObject: TObject): TRttiType;
 begin
   Result := FContext.GetType(pObject.ClassType);
   if not(CheckTableAttribute(Result)) then
-    raise ESemAtributoTabela.Create(Result.Name);
+    raise EDaoRTTISemAtributoTabela.Create(Result.Name);
 end;
 
 function TDaoRTTI.CheckAutoIncAttribute(const pProperty: TRttiProperty)
@@ -594,7 +686,7 @@ begin
   lColumns := ExtractColumnProps(lContextType);
 
   if (Length(lColumns) = 0) then
-    raise EClasseNaoMapeada.Create(lContextType.Name);
+    raise EDaoRTTIClasseNaoMapeada.Create(lContextType.Name);
 
   lSQL := BuildInsertSQL(lTable, lColumns);
 
@@ -627,14 +719,14 @@ begin
   Result := False;
 
   if (pWhereClause.Trim.IsEmpty) then
-    raise EWhereVazio.Create;
+    raise EDaoRTTIWhereVazio.Create;
 
   lContextType := GetRttiType(pObject);
   lTable := lContextType.GetAttribute<TDBTable>.TableName;
 
   lColumns := ExtractColumnProps(lContextType);
   if (Length(lColumns) = 0) then
-    raise EClasseNaoMapeada.Create(lContextType.Name);
+    raise EDaoRTTIClasseNaoMapeada.Create(lContextType.Name);
 
   lSets := TStringList.Create;
   lParamDict := TDictionary<String, Variant>.Create;
@@ -657,6 +749,22 @@ begin
 
 end;
 
+function TDaoRTTI.Where(const pPropMemRef: Pointer;
+  const pValueSought: Variant): TDaoRTTI;
+begin
+
+  Result := Self;
+
+  if not(Assigned(FObjeto)) then
+    raise EDaoRTTIObjetoNulo.Create;
+
+end;
+
+function TDaoRTTI.Where(const pSQLText: string): TDaoRTTI;
+begin
+
+end;
+
 function TDaoRTTI.UpdateByPK(const pObject: TObject): Boolean;
 var
   lType: TRttiType;
@@ -674,11 +782,11 @@ begin
 
   lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
-    raise ESemAtributoChavePrimaria.Create(lTable);
+    raise EDaoRTTISemAtributoChavePrimaria.Create(lTable);
 
   lPkValue := GetParamValue(pObject, lPk);
   if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
-    raise EChavePrimariaNula.Create;
+    raise EDaoRTTIChavePrimariaNula.Create;
 
   lColumns := ExtractColumnProps(lType);
   lSQL := BuildUpdateSQL(lTable, lColumns, TArray<TRttiProperty>.Create(lPk));
@@ -719,11 +827,11 @@ begin
 
   lPk := FindPrimaryKeyProperty(lType);
   if (lPk = nil) then
-    raise ESemAtributoChavePrimaria.Create(lTable);
+    raise EDaoRTTISemAtributoChavePrimaria.Create(lTable);
 
   lPkValue := GetParamValue(pObject, lPk);
   if ((VarIsNull(lPkValue)) or (lPkValue <= 0)) then
-    raise EChavePrimariaNula.Create;
+    raise EDaoRTTIChavePrimariaNula.Create;
 
   lSQL := Format('SELECT * FROM %s WHERE %s = :%s', [lTable, lPk.GetAttribute<TDBColumnAttribute>.FieldName, lPk.Name]);
 
@@ -801,6 +909,27 @@ begin
   finally
     lQuery.Free;
   end;
+
+end;
+
+function TDaoRTTI.Open: Boolean;
+begin
+
+end;
+
+function TDaoRTTI.OpenSelect: Boolean;
+begin
+
+end;
+
+function TDaoRTTI.OrderBy(const pPropMemRef: Pointer;
+  const pDesc: Boolean): TDaoRTTI;
+begin
+
+end;
+
+function TDaoRTTI.RecordExists: Boolean;
+begin
 
 end;
 

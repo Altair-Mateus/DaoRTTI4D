@@ -284,8 +284,8 @@ begin
   lObs := TObsUsuarios.Create;
   try
 
-    lUsuario.Id := 7;
-    lUsuario.Nome := 'Altair';
+    lUsuario.Id := 4;
+    lUsuario.Nome := 'Altair Mateus';
     lUsuario.Login := '21';
     lUsuario.Senha := '12345';
     lUsuario.Status := 'A';
@@ -295,7 +295,7 @@ begin
     lUsuario.UpdateByPk;
 
     lObs.IdUsuario := lUsuario.Id;
-    lObs.Descricao := 'Usuário alterado para administrador';
+    lObs.Descricao := 'Usuário Altair alterado para administrador';
     lObs.Insert;
 
     lTransaction.Commit;
